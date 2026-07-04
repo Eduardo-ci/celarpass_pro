@@ -3,9 +3,11 @@ import argparse
 import sys
 import getpass
 import json
-import pyperclip
 import threading
 import time
+import atexit
+import subprocess
+import os
 from zxcvbn import zxcvbn
 from rich.console import Console
 from rich.table import Table
@@ -13,15 +15,79 @@ from rich.table import Table
 from cipherpass_core.generators import PasswordEngine, TOTPEngine
 from cipherpass_core.hibp import HIBPClient
 from cipherpass_core.crypto_vault import VaultExporter
+import pyperclip
 
 console = Console()
 
-def clear_clipboard(original_text):
+def spawn_clipboard_daemon(password_text):
+    import tempfile
+    import stat
+    import os
+    import hashlib
+    
+    # 1. Guardar el estado anterior del portapapeles
+    old_clipboard = pyperclip.paste()
+    
+    # 2. Copiar la nueva contraseña al portapapeles activo
+    pyperclip.copy(password_text)
+    
+    # 3. Calcular el hash para el daemon (Zero-Knowledge)
+    target_hash = hashlib.sha256(password_text.encode('utf-8')).hexdigest()
+    
+    # 4. Escribir el estado ANTERIOR en un archivo temporal seguro
+    fd, temp_path = tempfile.mkstemp(prefix="cpass_")
+    os.chmod(temp_path, stat.S_IRUSR | stat.S_IWUSR)
+    with os.fdopen(fd, 'w') as f:
+        f.write(old_clipboard if old_clipboard else "")
+        
+    # Lanzar daemon multiplataforma
+    creationflags = 0
+    start_new_session = False
+    if sys.platform == "win32":
+        creationflags = 0x00000008 # DETACHED_PROCESS
+    else:
+        start_new_session = True
+        
+    subprocess.Popen([sys.executable, sys.argv[0], "--bg-clipboard-server", target_hash, temp_path],
+                     start_new_session=start_new_session,
+                     creationflags=creationflags,
+                     stdin=subprocess.DEVNULL,
+                     stdout=subprocess.DEVNULL,
+                     stderr=subprocess.DEVNULL)
+
+# Handler oculto del Daemon
+if len(sys.argv) == 4 and sys.argv[1] == "--bg-clipboard-server":
+    target_hash = sys.argv[2]
+    temp_path = sys.argv[3]
     try:
-        if pyperclip.paste() == original_text:
-            pyperclip.copy("")
+        import os
+        import hashlib
+        
+        # Leer el portapapeles anterior y borrar el archivo
+        old_clipboard = ""
+        if os.path.exists(temp_path):
+            with open(temp_path, "r") as f:
+                old_clipboard = f.read()
+            os.remove(temp_path)
+        
+        # Esperar 15 segundos
+        time.sleep(15)
+        
+        # Comprobar el portapapeles activo usando el hash
+        current_text = str(pyperclip.paste())
+        current_hash = hashlib.sha256(current_text.encode('utf-8')).hexdigest()
+        
+        if current_hash == target_hash:
+            # Restaurar el estado anterior (evita el espacio en blanco)
+            if old_clipboard:
+                pyperclip.copy(old_clipboard)
+            else:
+                pyperclip.copy("")
+                
     except Exception:
         pass
+    finally:
+        sys.exit(0)
 
 def output_result(data_to_copy, json_dict, json_flag, copy_flag, success_msg, rich_text_lines):
     if json_flag:
@@ -29,11 +95,9 @@ def output_result(data_to_copy, json_dict, json_flag, copy_flag, success_msg, ri
     else:
         if copy_flag:
             try:
-                pyperclip.copy(data_to_copy)
+                spawn_clipboard_daemon(data_to_copy)
+                del data_to_copy
                 console.print(f"[bold green]✔ {success_msg}[/bold green]")
-                timer = threading.Timer(15.0, clear_clipboard, args=[data_to_copy])
-                timer.daemon = True
-                timer.start()
             except Exception as e:
                 console.print(f"[bold red]❌ Failed to copy to clipboard (is a display server running?): {e}[/bold red]")
                 for line in rich_text_lines:

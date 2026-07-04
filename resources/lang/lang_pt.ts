@@ -4,298 +4,420 @@
 <context>
     <name>CipherPassApp</name>
     <message>
-        <location filename="../../main.py" line="414"/>
+        <location filename="../../main.py" line="639"/>
         <source>Ayuda</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="416"/>
+        <location filename="../../main.py" line="641"/>
         <source>Acerca de CipherPass...</source>
         <translation>Sobre o CipherPass...</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="412"/>
+        <location filename="../../main.py" line="637"/>
         <source>Idioma</source>
         <translation>Linguagem</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="405"/>
+        <location filename="../../main.py" line="259"/>
+        <source>Opciones de Seguridad</source>
+        <translation>Opções de segurança</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="268"/>
+        <source>Limpieza de campos sensibles</source>
+        <translation>Limpeza de campos sensíveis</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="271"/>
+        <source>Limpiar al cambiar de pestaña (Recomendado)</source>
+        <translation>Limpe ao trocar de abas (Recomendado)</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="272"/>
+        <source>Máxima seguridad. Los campos generados se borran automáticamente al cambiar de pestaña.</source>
+        <translation>Segurança máxima. Os campos gerados são apagados automaticamente ao trocar de aba.</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="276"/>
+        <source>Limpiar solo al cerrar la aplicación</source>
+        <translation>Limpar somente ao fechar o aplicativo</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="277"/>
+        <source>Mejor experiencia. Puedes volver a ver los datos generados mientras la app esté abierta.
+⚠ Los datos permanecen visibles en pantalla.</source>
+        <translation>Experiência aprimorada. Você pode visualizar os dados gerados novamente enquanto o aplicativo estiver aberto.
+⚠ Os dados permanecem visíveis na tela.</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="281"/>
+        <source>Limpiar tras 60 segundos de inactividad</source>
+        <translation>Limpe após 60 segundos de inatividade</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="282"/>
+        <source>Balance entre seguridad y comodidad. Los campos se borran si no hay interacción durante 60 segundos al cambiar de pestaña.</source>
+        <translation>Um equilíbrio entre segurança e conveniência. Os campos são apagados se não houver interação por 60 segundos ao trocar de aba.</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="299"/>
+        <source>Limpieza del portapapeles</source>
+        <translation>Limpeza da prancheta</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="302"/>
+        <source>Borrar contenido e historial siempre</source>
+        <translation>Apague sempre o conteúdo e o histórico</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="303"/>
+        <source>Al copiar y al cerrar, se limpia el contenido Y todo el historial del portapapeles.
+⚠ Borra también lo que hayas copiado desde otras aplicaciones.</source>
+        <translation>Copiar e fechar apaga o conteúdo E todo o histórico da área de transferência.
+⚠ Também apaga tudo o que você copiou de outros aplicativos.</translation>
+    </message>
+    <message>
+        <source>Solo borrar el contenido actual</source>
+        <translation type="vanished">Exclua apenas o conteúdo atual (Recomendado)</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="308"/>
+        <source>Limpia el último elemento copiado tras 15s, sin tocar el historial del portapapeles.
+⚠ Contraseñas anteriores pueden quedar en el historial del gestor de portapapeles.</source>
+        <translation>Apaga o último item copiado após 15 segundos, sem afetar o histórico da área de transferência.
+⚠ Senhas anteriores podem permanecer no histórico da área de transferência.</translation>
+    </message>
+    <message>
+        <source>Borrar historial solo al cerrar (Recomendado)</source>
+        <translation type="vanished">Limpar histórico somente ao fechar</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="307"/>
+        <source>Solo borrar el contenido actual (Recomendado)</source>
+        <translation>Exclua apenas o conteúdo atual (Recomendado)</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="312"/>
+        <source>Borrar historial solo al cerrar</source>
+        <translation>Limpar histórico somente ao fechar</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="313"/>
+        <source>El contenido activo se limpia tras 15s. El historial completo se purga al cerrar la aplicación.</source>
+        <translation>O conteúdo ativo é apagado após 15s. Todo o histórico é eliminado quando você fecha o aplicativo.</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="331"/>
+        <source>Aceptar</source>
+        <translation>Aceitar</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="332"/>
+        <source>Cancelar</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="508"/>
+        <location filename="../../main.py" line="963"/>
+        <source>✓ Copiado seguro, se borrará en 15 segundos</source>
+        <translation>✓ Cópia segura, será excluída em 15 segundos</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="630"/>
         <source>Archivo</source>
         <translation>Arquivo</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="406"/>
+        <location filename="../../main.py" line="631"/>
         <source>Salir</source>
         <translation>Salir</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="408"/>
+        <location filename="../../main.py" line="633"/>
         <source>Herramientas</source>
         <translation>Ferramentas</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="409"/>
+        <location filename="../../main.py" line="634"/>
         <source>Limpiar Portapapeles</source>
         <translation>Portapapeles Limpiar</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="411"/>
+        <location filename="../../main.py" line="636"/>
         <source>Opciones</source>
         <translation>Opções</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="415"/>
+        <location filename="../../main.py" line="640"/>
         <source>Documentación en línea</source>
         <translation>Documentação online</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="455"/>
+        <location filename="../../main.py" line="642"/>
+        <source>Seguridad...</source>
+        <translation>Segurança...</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="743"/>
         <source>Portapapeles Limpio</source>
         <translation>Portapapeles Limpio</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="456"/>
+        <location filename="../../main.py" line="744"/>
         <source>El portapapeles ha sido borrado por seguridad.</source>
         <translation>Os porta-papeles foram borrados por segurança.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="475"/>
+        <location filename="../../main.py" line="763"/>
         <source>GNU AGPLv3 (Código Abierto)</source>
         <translation>GNU AGPLv3 (Código Aberto)</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="476"/>
+        <location filename="../../main.py" line="764"/>
         <source>Versión:</source>
         <translation>Versão:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="477"/>
+        <location filename="../../main.py" line="765"/>
         <source>Licencia:</source>
         <translation>Licença:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="478"/>
+        <location filename="../../main.py" line="766"/>
         <source>Aplicación de código abierto diseñada para generar, validar y proteger credenciales criptográficas asegurando tu privacidad offline-first.</source>
         <translation>Aplicativo de código aberto projetado para gerar, validar e proteger credenciais criptográficas, garantindo sua privacidade mesmo offline.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="479"/>
+        <location filename="../../main.py" line="767"/>
         <source>Visitar el sitio web oficial</source>
         <translation>Visite o site oficial</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="480"/>
+        <location filename="../../main.py" line="768"/>
         <source>Acerca de CipherPass</source>
         <translation>Sobre o CipherPass</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="524"/>
+        <location filename="../../main.py" line="812"/>
         <source>Tiempo estimado:</source>
         <translation>Tempo estimado:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="532"/>
+        <location filename="../../main.py" line="820"/>
         <source>Instantáneo</source>
         <translation>Instant</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="534"/>
+        <location filename="../../main.py" line="822"/>
         <source>{int(seconds)} s</source>
         <translation>{int(seconds)} s</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="536"/>
+        <location filename="../../main.py" line="824"/>
         <source>{int(seconds/60)} min</source>
         <translation>{int(seconds/60)} min</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="538"/>
+        <location filename="../../main.py" line="826"/>
         <source>{int(seconds/3600)} h</source>
         <translation>{int(seconds/3600)} h</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="540"/>
+        <location filename="../../main.py" line="828"/>
         <source>{int(seconds/86400)} días</source>
         <translation>{int(seconds/86400)} dias</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="542"/>
+        <location filename="../../main.py" line="830"/>
         <source>{int(seconds/31536000)} años</source>
         <translation>{int(seconds/31536000)} anos</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="543"/>
+        <location filename="../../main.py" line="831"/>
         <source>Siglos</source>
         <translation>Idades</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="602"/>
+        <location filename="../../main.py" line="910"/>
+        <location filename="../../main.py" line="936"/>
         <source>Selecciona opciones</source>
         <translation>Selecione as opções</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="611"/>
+        <location filename="../../main.py" line="919"/>
+        <location filename="../../main.py" line="936"/>
         <source>Error: Sin diccionario</source>
         <translation>Erro: Nenhum dicionário</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="621"/>
+        <location filename="../../main.py" line="929"/>
         <source>Tiempo estimado: -</source>
         <translation>Tempo estimado: -</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="624"/>
+        <location filename="../../main.py" line="932"/>
         <source>Ingresa una contraseña...</source>
         <translation>Digite uma senha...</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="683"/>
+        <location filename="../../main.py" line="952"/>
+        <source>¡Copiado!</source>
+        <translation>Copiado!</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="974"/>
+        <source>CipherPass Pro</source>
+        <translation>CipherPass Pro</translation>
+    </message>
+    <message>
+        <location filename="../../main.py" line="1032"/>
         <source>Bloqueado por Política:</source>
         <translation>Bloqueado pela política:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="696"/>
+        <location filename="../../main.py" line="1045"/>
         <source>Vacío</source>
         <translation>Vazio</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="696"/>
+        <location filename="../../main.py" line="1045"/>
         <source>Ingresa una contraseña para validar.</source>
         <translation>Digite uma senha para validar.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="702"/>
+        <location filename="../../main.py" line="1051"/>
         <source>Consultando de forma anónima...</source>
         <translation>Consultando anonimamente...</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="716"/>
+        <location filename="../../main.py" line="1065"/>
         <source>⚠️ Error:</source>
         <translation>⚠️ Error:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="720"/>
+        <location filename="../../main.py" line="1069"/>
         <source>✅ Excelente. Esta contraseña no aparece en brechas de datos conocidas.</source>
         <translation>✅ Excelente. Esta senha não consta em nenhuma violação de dados conhecida.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="723"/>
+        <location filename="../../main.py" line="1072"/>
         <source>🚨 PELIGRO: Esta contraseña ha sido expuesta</source>
         <translation>🚨 PERIGO: Esta senha foi exposta</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="724"/>
+        <location filename="../../main.py" line="1073"/>
         <source>veces.</source>
         <translation>vezes.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="732"/>
-        <location filename="../../main.py" line="760"/>
-        <location filename="../../main.py" line="780"/>
-        <location filename="../../main.py" line="811"/>
+        <location filename="../../main.py" line="1081"/>
+        <location filename="../../main.py" line="1109"/>
+        <location filename="../../main.py" line="1129"/>
+        <location filename="../../main.py" line="1160"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="732"/>
+        <location filename="../../main.py" line="1081"/>
         <source>No hay datos para exportar.</source>
         <translation>Não há dados para exportar.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="735"/>
+        <location filename="../../main.py" line="1084"/>
         <source>Cifrar Bóveda</source>
         <translation>Criptografar o cofre</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="735"/>
-        <location filename="../../main.py" line="763"/>
+        <location filename="../../main.py" line="1084"/>
+        <location filename="../../main.py" line="1112"/>
         <source>Ingresa la contraseña maestra:</source>
         <translation>Digite a senha mestra:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="741"/>
+        <location filename="../../main.py" line="1090"/>
         <source>Guardar Bóveda</source>
         <translation>Salvar o cofre</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="745"/>
+        <location filename="../../main.py" line="1094"/>
         <source>✅ Bóveda exportada exitosamente.</source>
         <translation>✅ Cofre exportado com sucesso.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="748"/>
+        <location filename="../../main.py" line="1097"/>
         <source>Fallo al exportar:</source>
         <translation>A exportação falhou:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="749"/>
+        <location filename="../../main.py" line="1098"/>
         <source>Error Crítico</source>
         <translation>Erro Crítico</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="753"/>
+        <location filename="../../main.py" line="1102"/>
         <source>Abrir Bóveda</source>
         <translation>Cofre aberto</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="760"/>
+        <location filename="../../main.py" line="1109"/>
         <source>Archivo no encontrado.</source>
         <translation>Arquivo não encontrado.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="763"/>
+        <location filename="../../main.py" line="1112"/>
         <source>Descifrar Bóveda</source>
         <translation>Decifrar o Cofre</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="772"/>
+        <location filename="../../main.py" line="1121"/>
         <source>✅ Bóveda descifrada exitosamente.</source>
         <translation>✅ Cofre descriptografado com sucesso.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="775"/>
+        <location filename="../../main.py" line="1124"/>
         <source>Acceso Denegado</source>
         <translation>Acesso negado</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="775"/>
+        <location filename="../../main.py" line="1124"/>
         <source>Contraseña maestra incorrecta o archivo dañado.</source>
         <translation>Senha mestra incorreta ou arquivo corrompido.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="776"/>
+        <location filename="../../main.py" line="1125"/>
         <source>❌ Fallo de descifrado.</source>
         <translation>❌ Falha na descriptografia.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="779"/>
+        <location filename="../../main.py" line="1128"/>
         <source>Fallo de E/S:</source>
         <translation>Falha de E/S:</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="799"/>
+        <location filename="../../main.py" line="1148"/>
         <source>Módulo &apos;qrcode&apos; no instalado.
 Usa el secreto manual.</source>
         <translation>O módulo &apos;qrcode&apos; não está instalado.
 Use um segredo manual.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="806"/>
+        <location filename="../../main.py" line="1155"/>
         <source>Guardar Código QR</source>
         <translation>Salvar código QR</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="809"/>
+        <location filename="../../main.py" line="1158"/>
         <source>Éxito</source>
         <translation>Sucesso</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="809"/>
+        <location filename="../../main.py" line="1158"/>
         <source>Código QR guardado correctamente.</source>
         <translation>Código QR salvo com sucesso.</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="811"/>
+        <location filename="../../main.py" line="1160"/>
         <source>No hay un código QR para guardar.</source>
         <translation>Não há código QR para salvar.</translation>
     </message>
@@ -347,12 +469,12 @@ Use um segredo manual.</translation>
         <translation>A biblioteca &apos;requests&apos; não está instalada.</translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/hibp.py" line="37"/>
+        <location filename="../../cipherpass_core/hibp.py" line="39"/>
         <source>Error HTTP</source>
         <translation>Error HTTP</translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/hibp.py" line="41"/>
+        <location filename="../../cipherpass_core/hibp.py" line="43"/>
         <source>Error de conexión o timeout.</source>
         <translation>Erro de conexão ou tempo limite excedido.</translation>
     </message>

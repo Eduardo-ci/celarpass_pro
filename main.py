@@ -28,16 +28,27 @@ try:
 except ImportError:
     pass  # Ignorar si no está compilado el archivo de recursos aún
 
+# --- INTEGRACIÓN DBUS (solo Linux/KDE para Klipper) ---
+_HAS_DBUS = False
+if sys.platform != "win32":
+    try:
+        from PySide6.QtDBus import QDBusConnection, QDBusMessage, QDBus
+        _HAS_DBUS = True
+    except ImportError:
+        pass
+
 from platformdirs import user_config_dir
 from cryptography.fernet import Fernet
 
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QLineEdit, QProgressBar, 
-    QMessageBox, QInputDialog, QFileDialog
+    QMessageBox, QInputDialog, QFileDialog, QDialog,
+    QGroupBox, QRadioButton, QVBoxLayout, QHBoxLayout,
+    QButtonGroup, QPushButton, QLabel, QSystemTrayIcon
 )
 from PySide6.QtCore import (
     QLocale, QTranslator, Slot, QIODevice, QFile, QSettings, 
-    QCoreApplication, QObject, Signal, QRunnable, QThreadPool, QEvent, QUrl
+    QCoreApplication, QObject, Signal, QRunnable, QThreadPool, QEvent, QUrl, QTimer, QMimeData
 )
 from PySide6.QtGui import QClipboard, QPixmap, QImage, QDesktopServices
 from PySide6.QtUiTools import QUiLoader
@@ -92,6 +103,21 @@ class SettingsManager:
 
     def set_language(self, lang_code: str) -> None:
         self.settings.setValue("language", lang_code.strip())
+
+    # --- Opciones de Seguridad ---
+    def get_field_clear_mode(self) -> str:
+        """Modo de limpieza de campos: 'tab_change', 'on_exit', 'timeout'."""
+        return str(self.settings.value("security/field_clear_mode", "tab_change")).strip()
+
+    def set_field_clear_mode(self, mode: str) -> None:
+        self.settings.setValue("security/field_clear_mode", mode.strip())
+
+    def get_clipboard_clear_mode(self) -> str:
+        """Modo de limpieza del portapapeles: 'full_always', 'current_only', 'history_on_exit'."""
+        return str(self.settings.value("security/clipboard_clear_mode", "current_only")).strip()
+
+    def set_clipboard_clear_mode(self, mode: str) -> None:
+        self.settings.setValue("security/clipboard_clear_mode", mode.strip())
 
 # --- COMPLIANCE MANAGER ---
 class ComplianceManager:
@@ -227,6 +253,130 @@ class QRHelper:
 
 
 # --- INTERFAZ PRINCIPAL ---
+class SecuritySettingsDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(QCoreApplication.translate("CipherPassApp", "Opciones de Seguridad"))
+        self.setModal(True)
+        self.settings = SettingsManager()
+        self.init_ui()
+        self.load_settings()
+
+    def init_ui(self):
+        layout = QVBoxLayout(self)
+
+        self.fields_group = QGroupBox(QCoreApplication.translate("CipherPassApp", "Limpieza de campos sensibles"))
+        fields_layout = QVBoxLayout()
+        
+        self.rb_field_tab = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar al cambiar de pestaña (Recomendado)"))
+        lbl_field_tab = QLabel(QCoreApplication.translate("CipherPassApp", "Máxima seguridad. Los campos generados se borran automáticamente al cambiar de pestaña."))
+        lbl_field_tab.setWordWrap(True)
+        lbl_field_tab.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.rb_field_exit = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar solo al cerrar la aplicación"))
+        lbl_field_exit = QLabel(QCoreApplication.translate("CipherPassApp", "Mejor experiencia. Puedes volver a ver los datos generados mientras la app esté abierta.\n⚠ Los datos permanecen visibles en pantalla."))
+        lbl_field_exit.setWordWrap(True)
+        lbl_field_exit.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.rb_field_timeout = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar tras 60 segundos de inactividad"))
+        lbl_field_timeout = QLabel(QCoreApplication.translate("CipherPassApp", "Balance entre seguridad y comodidad. Los campos se borran si no hay interacción durante 60 segundos al cambiar de pestaña."))
+        lbl_field_timeout.setWordWrap(True)
+        lbl_field_timeout.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.bg_fields = QButtonGroup(self)
+        self.bg_fields.addButton(self.rb_field_tab, 0)
+        self.bg_fields.addButton(self.rb_field_exit, 1)
+        self.bg_fields.addButton(self.rb_field_timeout, 2)
+        
+        fields_layout.addWidget(self.rb_field_tab)
+        fields_layout.addWidget(lbl_field_tab)
+        fields_layout.addWidget(self.rb_field_exit)
+        fields_layout.addWidget(lbl_field_exit)
+        fields_layout.addWidget(self.rb_field_timeout)
+        fields_layout.addWidget(lbl_field_timeout)
+        self.fields_group.setLayout(fields_layout)
+        
+        self.clip_group = QGroupBox(QCoreApplication.translate("CipherPassApp", "Limpieza del portapapeles"))
+        clip_layout = QVBoxLayout()
+        
+        self.rb_clip_full = QRadioButton(QCoreApplication.translate("CipherPassApp", "Borrar contenido e historial siempre"))
+        lbl_clip_full = QLabel(QCoreApplication.translate("CipherPassApp", "Al copiar y al cerrar, se limpia el contenido Y todo el historial del portapapeles.\n⚠ Borra también lo que hayas copiado desde otras aplicaciones."))
+        lbl_clip_full.setWordWrap(True)
+        lbl_clip_full.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.rb_clip_current = QRadioButton(QCoreApplication.translate("CipherPassApp", "Solo borrar el contenido actual (Recomendado)"))
+        lbl_clip_current = QLabel(QCoreApplication.translate("CipherPassApp", "Limpia el último elemento copiado tras 15s, sin tocar el historial del portapapeles.\n⚠ Contraseñas anteriores pueden quedar en el historial del gestor de portapapeles."))
+        lbl_clip_current.setWordWrap(True)
+        lbl_clip_current.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.rb_clip_history = QRadioButton(QCoreApplication.translate("CipherPassApp", "Borrar historial solo al cerrar"))
+        lbl_clip_history = QLabel(QCoreApplication.translate("CipherPassApp", "El contenido activo se limpia tras 15s. El historial completo se purga al cerrar la aplicación."))
+        lbl_clip_history.setWordWrap(True)
+        lbl_clip_history.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
+        
+        self.bg_clip = QButtonGroup(self)
+        self.bg_clip.addButton(self.rb_clip_full, 0)
+        self.bg_clip.addButton(self.rb_clip_current, 1)
+        self.bg_clip.addButton(self.rb_clip_history, 2)
+        
+        clip_layout.addWidget(self.rb_clip_full)
+        clip_layout.addWidget(lbl_clip_full)
+        clip_layout.addWidget(self.rb_clip_current)
+        clip_layout.addWidget(lbl_clip_current)
+        clip_layout.addWidget(self.rb_clip_history)
+        clip_layout.addWidget(lbl_clip_history)
+        self.clip_group.setLayout(clip_layout)
+        
+        btn_layout = QHBoxLayout()
+        self.btn_accept = QPushButton(QCoreApplication.translate("CipherPassApp", "Aceptar"))
+        self.btn_cancel = QPushButton(QCoreApplication.translate("CipherPassApp", "Cancelar"))
+        btn_layout.addStretch()
+        btn_layout.addWidget(self.btn_accept)
+        btn_layout.addWidget(self.btn_cancel)
+        
+        layout.addWidget(self.fields_group)
+        layout.addWidget(self.clip_group)
+        layout.addLayout(btn_layout)
+        
+        self.btn_accept.clicked.connect(self.save_settings)
+        self.btn_cancel.clicked.connect(self.reject)
+        self.resize(500, 550)
+        
+    def load_settings(self):
+        fm = self.settings.get_field_clear_mode()
+        if fm == "timeout":
+            self.rb_field_timeout.setChecked(True)
+        elif fm == "on_exit":
+            self.rb_field_exit.setChecked(True)
+        else:
+            self.rb_field_tab.setChecked(True)
+            
+        cm = self.settings.get_clipboard_clear_mode()
+        if cm == "full_always":
+            self.rb_clip_full.setChecked(True)
+        elif cm == "current_only":
+            self.rb_clip_current.setChecked(True)
+        else:
+            self.rb_clip_history.setChecked(True)
+            
+    def save_settings(self):
+        if self.rb_field_timeout.isChecked():
+            self.settings.set_field_clear_mode("timeout")
+        elif self.rb_field_exit.isChecked():
+            self.settings.set_field_clear_mode("on_exit")
+        else:
+            self.settings.set_field_clear_mode("tab_change")
+            
+        if self.rb_clip_full.isChecked():
+            self.settings.set_clipboard_clear_mode("full_always")
+        elif self.rb_clip_current.isChecked():
+            self.settings.set_clipboard_clear_mode("current_only")
+        else:
+            self.settings.set_clipboard_clear_mode("history_on_exit")
+            
+        self.accept()
+
+
 class CipherPassApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
@@ -239,6 +389,17 @@ class CipherPassApp(QMainWindow):
         self.translator = QTranslator()
         self.ui = None
         
+        self._clipboard_timer = QTimer(self)
+        self._clipboard_timer.setSingleShot(True)
+        self._clipboard_timer.timeout.connect(lambda: self._perform_clipboard_clear(show_msg=False))
+        
+        self._field_clear_timer = QTimer(self)
+        self._field_clear_timer.setSingleShot(True)
+        self._field_clear_timer.timeout.connect(self._clear_pending_fields)
+        self._pending_clear_widgets = []
+        
+        self._clipboard_secret = ""
+        
         self.init_ui()
 
     def init_ui(self) -> None:
@@ -247,6 +408,40 @@ class CipherPassApp(QMainWindow):
         if self.ui:
             self.setWindowTitle("CipherPass")
             self.show()
+
+    def _secure_clear_line_edit(self, widget: QLineEdit) -> None:
+        """Sobrescribe buffer C++ con ceros y vacía."""
+        text_len = len(widget.text())
+        if text_len > 0:
+            widget.setText("0" * text_len)
+            widget.clear()
+
+    def _secure_clear_text_edit(self, widget) -> None:
+        """Sobrescribe, vacía, y destruye undo stack."""
+        text_len = len(widget.toPlainText())
+        if text_len > 0:
+            widget.setPlainText("0" * text_len)
+            widget.clear()
+        widget.setUndoRedoEnabled(False)
+        widget.setUndoRedoEnabled(True)
+
+    def _clear_pending_fields(self):
+        for widget in self._pending_clear_widgets:
+            if isinstance(widget, QLineEdit):
+                self._secure_clear_line_edit(widget)
+            else:
+                self._secure_clear_text_edit(widget)
+        self._pending_clear_widgets.clear()
+
+    def _clear_klipper_history(self) -> None:
+        if _HAS_DBUS:
+            try:
+                msg = QDBusMessage.createMethodCall(
+                    "org.kde.klipper", "/klipper", "org.kde.klipper.klipper", "clearClipboardHistory"
+                )
+                QDBusConnection.sessionBus().call(msg, QDBus.CallMode.NoBlock)
+            except Exception as e:
+                logging.warning(f"Error al limpiar Klipper: {e}")
 
     def load_translation(self, lang_code: str) -> None:
         QApplication.instance().removeTranslator(self.translator)
@@ -310,6 +505,34 @@ class CipherPassApp(QMainWindow):
         self.ui.comboBox_idioma.blockSignals(True)
         self.ui.comboBox_idioma.clear()
         
+        self.lbl_copy_feedback = QLabel(QCoreApplication.translate("CipherPassApp", "✓ Copiado seguro, se borrará en 15 segundos"), self.ui)
+        self.lbl_copy_feedback.setStyleSheet("color: #198754; margin-left: 10px; font-weight: bold;")
+        self.lbl_copy_feedback.hide()
+        
+        # Buscar recursivamente el layout exacto que contiene el comboBox
+        parent_widget = self.ui.comboBox_idioma.parentWidget()
+        
+        def find_layout_for_widget(layout, target_widget):
+            if not layout: return None
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
+                if item.widget() == target_widget:
+                    return layout
+                elif item.layout():
+                    found = find_layout_for_widget(item.layout(), target_widget)
+                    if found: return found
+            return None
+            
+        target_layout = None
+        if parent_widget and parent_widget.layout():
+            target_layout = find_layout_for_widget(parent_widget.layout(), self.ui.comboBox_idioma)
+            
+        if target_layout:
+            idx = target_layout.indexOf(self.ui.comboBox_idioma)
+            target_layout.insertWidget(idx + 1, self.lbl_copy_feedback)
+        else:
+            self.lbl_copy_feedback.setParent(self.ui.comboBox_idioma.parentWidget())
+        
         lang_dir = resource_path(os.path.join("resources", "lang"))
         lang_map_dynamic = {}
         for lf in glob.glob(os.path.join(lang_dir, "lang_*.qm")):
@@ -359,6 +582,8 @@ class CipherPassApp(QMainWindow):
         self.ui.btn_copiar_usuario.clicked.connect(lambda: self.copy_to_clipboard(self.ui.lineEdit_usuario))
 
         # 4. Validar Pasivo Original
+        self.ui.lineEdit_validar_pass.setEchoMode(QLineEdit.Password)
+        self.ui.btn_validar_ver.setChecked(False)
         self.ui.btn_validar_ver.toggled.connect(self.toggle_password_visibility)
         self.ui.lineEdit_validar_pass.textChanged.connect(self.analyze_password_strength)
 
@@ -414,6 +639,7 @@ class CipherPassApp(QMainWindow):
         ayuda_text = QCoreApplication.translate("CipherPassApp", "Ayuda")
         docs_text = QCoreApplication.translate("CipherPassApp", "Documentación en línea")
         acerca_text = QCoreApplication.translate("CipherPassApp", "Acerca de CipherPass...")
+        seguridad_text = QCoreApplication.translate("CipherPassApp", "Seguridad...")
         
         # --- 1. Menú Archivo ---
         file_menu = menu_bar.addMenu(archivo_text)
@@ -427,6 +653,10 @@ class CipherPassApp(QMainWindow):
         
         # --- 3. Menú Opciones ---
         options_menu = menu_bar.addMenu(opciones_text)
+        security_action = options_menu.addAction(seguridad_text)
+        security_action.triggered.connect(self._open_security_settings)
+        options_menu.addSeparator()
+        
         lang_menu = options_menu.addMenu(idioma_text)
         
         lang_dir = resource_path(os.path.join("resources", "lang"))
@@ -445,16 +675,74 @@ class CipherPassApp(QMainWindow):
         about_action.triggered.connect(self.show_about_dialog)
 
     @Slot()
+    def _open_security_settings(self):
+        dialog = SecuritySettingsDialog(self)
+        dialog.exec()
+
+    def _purge_all_sensitive_data(self) -> None:
+        self._clipboard_timer.stop()
+        self._field_clear_timer.stop()
+        
+        sensibles = [
+            self.ui.lineEdit_contrasena,
+            self.ui.lineEdit_frase,
+            self.ui.lineEdit_usuario,
+            self.ui.lineEdit_token_resultado,
+            self.ui.lineEdit_totp_secret,
+            self.ui.lineEdit_totp_uri,
+            self.ui.lineEdit_validar_pass
+        ]
+        for w in sensibles:
+            if w: self._secure_clear_line_edit(w)
+            
+        if self.ui.textEdit_import_data: self._secure_clear_text_edit(self.ui.textEdit_import_data)
+        if self.ui.textEdit_export_data: self._secure_clear_text_edit(self.ui.textEdit_export_data)
+        
+        if hasattr(self.ui, 'label_qr') and self.ui.label_qr.pixmap():
+            self.ui.label_qr.clear()
+            
+        self._perform_clipboard_clear(show_msg=False)
+        
+        mode = self.settings.get_clipboard_clear_mode()
+        if mode in ("full_always", "history_on_exit"):
+            self._clear_klipper_history()
+
+    def closeEvent(self, event) -> None:
+        self._purge_all_sensitive_data()
+        event.accept()
+
+    @Slot()
     def quit_app_action(self) -> None:
+        self._purge_all_sensitive_data()
         QApplication.quit()
 
     @Slot()
     def clear_clipboard_action(self) -> None:
-        QApplication.clipboard().clear()
-        QMessageBox.information(self, 
-            QCoreApplication.translate("CipherPassApp", "Portapapeles Limpio"), 
-            QCoreApplication.translate("CipherPassApp", "El portapapeles ha sido borrado por seguridad.")
-        )
+        self._perform_clipboard_clear(show_msg=True)
+
+    def _perform_clipboard_clear(self, show_msg: bool = True) -> None:
+        if hasattr(self, 'lbl_copy_feedback'):
+            self.lbl_copy_feedback.hide()
+            
+        clipboard = QApplication.clipboard()
+        current_text = clipboard.text()
+        
+        # Solo borrar si el portapapeles sigue conteniendo la contraseña generada
+        if current_text == self._clipboard_secret and self._clipboard_secret != "":
+            clipboard.clear(QClipboard.Mode.Clipboard)
+            if sys.platform != "win32" and clipboard.supportsSelection():
+                clipboard.clear(QClipboard.Mode.Selection)
+                
+        self._clipboard_secret = ""
+        mode = self.settings.get_clipboard_clear_mode()
+        if mode == "full_always":
+            self._clear_klipper_history()
+            
+        if show_msg:
+            QMessageBox.information(self, 
+                QCoreApplication.translate("CipherPassApp", "Portapapeles Limpio"), 
+                QCoreApplication.translate("CipherPassApp", "El portapapeles ha sido borrado por seguridad.")
+            )
 
     @Slot()
     def open_documentation_action(self) -> None:
@@ -562,21 +850,41 @@ class CipherPassApp(QMainWindow):
 
     @Slot(int)
     def on_tab_changed(self, index: int) -> None:
-        """Sobrescribe y limpia los datos sensibles cuando se sale de la pestaña de la bóveda."""
+        """Sobrescribe y limpia los datos sensibles cuando se cambia de pestaña."""
         current_widget = self.ui.tabWidget.widget(index)
+        
+        if current_widget != self.ui.tab_validar:
+            self._secure_clear_line_edit(self.ui.lineEdit_validar_pass)
+            self.reset_validar_ui()
+            if hasattr(self.ui, 'label_hibp_resultado'):
+                self.ui.label_hibp_resultado.setVisible(False)
+            if hasattr(self.ui, 'progressBar_hibp'):
+                self.ui.progressBar_hibp.setVisible(False)
+
         if current_widget != self.ui.tab_vault:
-            # Sobrescribir con ceros antes de vaciar fuerza el borrado en el buffer C++ (QTextDocument)
-            import_len = len(self.ui.textEdit_import_data.toPlainText())
-            if import_len > 0:
-                self.ui.textEdit_import_data.setPlainText("0" * import_len)
-                self.ui.textEdit_import_data.clear()
-                
-            export_len = len(self.ui.textEdit_export_data.toPlainText())
-            if export_len > 0:
-                self.ui.textEdit_export_data.setPlainText("0" * export_len)
-                self.ui.textEdit_export_data.clear()
-                
+            self._secure_clear_text_edit(self.ui.textEdit_import_data)
+            self._secure_clear_text_edit(self.ui.textEdit_export_data)
             self.ui.label_vault_estado.clear()
+
+        # Otras pestañas según configuración
+        mode = self.settings.get_field_clear_mode()
+        sensibles = [
+            self.ui.lineEdit_contrasena,
+            self.ui.lineEdit_frase,
+            self.ui.lineEdit_usuario,
+            self.ui.lineEdit_token_resultado,
+            self.ui.lineEdit_totp_secret,
+            self.ui.lineEdit_totp_uri
+        ]
+        
+        if mode == "tab_change":
+            for w in sensibles:
+                if w: self._secure_clear_line_edit(w)
+        elif mode == "timeout":
+            self._pending_clear_widgets.extend([w for w in sensibles if w])
+            # Evitar duplicados
+            self._pending_clear_widgets = list(set(self._pending_clear_widgets))
+            self._field_clear_timer.start(60000)
 
     def validate_spinbox_contrasena(self) -> None:
         length = self.ui.spinBox_longitud.value()
@@ -624,7 +932,48 @@ class CipherPassApp(QMainWindow):
         self.ui.label_validar_mensaje.setText(QCoreApplication.translate("CipherPassApp", "Ingresa una contraseña..."))
 
     def copy_to_clipboard(self, widget: QLineEdit) -> None:
-        QApplication.clipboard().setText(widget.text())
+        text = widget.text()
+        if not text or text == QCoreApplication.translate("CipherPassApp", "Selecciona opciones") or text == QCoreApplication.translate("CipherPassApp", "Error: Sin diccionario"):
+            return
+            
+        # Guardar referencia en self para evitar recolección de basura prematura
+        self._clipboard_secret = text
+        self._current_mime_data = QMimeData()
+        self._current_mime_data.setText(text)
+        self._current_mime_data.setData("x-kde-passwordManagerHint", b"secret")
+        QApplication.clipboard().setMimeData(self._current_mime_data)
+        
+        btn = self.sender()
+        if isinstance(btn, QPushButton):
+            original_style = btn.styleSheet()
+            original_text = btn.text()
+            btn.setStyleSheet("background-color: #198754; color: white; border-radius: 4px;")
+            if original_text:
+                btn.setText(QCoreApplication.translate("CipherPassApp", "¡Copiado!"))
+                
+            def restore_btn():
+                btn.setStyleSheet(original_style)
+                btn.setText(original_text)
+                
+            QTimer.singleShot(1500, restore_btn)
+        
+        is_new_copy = not self._clipboard_timer.isActive()
+        self._clipboard_timer.start(15000)
+        
+        msg = QCoreApplication.translate("CipherPassApp", "✓ Copiado seguro, se borrará en 15 segundos")
+        if hasattr(self, 'lbl_copy_feedback'):
+            self.lbl_copy_feedback.setText(msg)
+            self.lbl_copy_feedback.show()
+        
+        if is_new_copy:
+            if not hasattr(self, '_tray_icon'):
+                self._tray_icon = QSystemTrayIcon(self)
+                self._tray_icon.setIcon(self.windowIcon())
+                self._tray_icon.show()
+            self._tray_icon.showMessage(
+                QCoreApplication.translate("CipherPassApp", "CipherPass Pro"), msg,
+                QSystemTrayIcon.MessageIcon.Information, 3000
+            )
 
     # --- NUEVOS SLOTS PRO: Tokens, Compliance, HIBP, Vault, TOTP ---
     @Slot()
