@@ -31,7 +31,7 @@ CLI_VERSION="v1.0.4"
 CORE_VERSION="025db8e9f88251accfc9a09f64483c216fc1c080"
 
 # Ubicación del ejecutable a nivel de usuario (evita requerir sudo)
-BIN_LINK="$HOME/.local/bin/cipherpass-cli"
+BIN_LINK="$HOME/.local/bin/celarpass-cli"
 
 # Validar dependencias esenciales
 for cmd in python3 git; do
@@ -95,7 +95,7 @@ if [ -f "$CURRENT_DIR/cipherpass_cli.py" ] && [ -d "$CURRENT_DIR/cipherpass_core
     chmod +x "$CLI_SCRIPT"
 else
     echo_info "Ejecutando en Modo Standalone (Instalación en ~/.local/share)..."
-    INSTALL_DIR="$HOME/.local/share/cipherpass-cli"
+    INSTALL_DIR="$HOME/.local/share/celarpass-cli"
     CLI_SCRIPT="$INSTALL_DIR/cipherpass_cli.py"
     VENV_DIR="$INSTALL_DIR/.venv"
     CORE_REPO_PATH="$INSTALL_DIR/cipherpass_core_repo"
@@ -104,9 +104,9 @@ else
     
     echo_info "Descargando cipherpass_cli.py (versión: $CLI_VERSION)..."
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "https://raw.githubusercontent.com/Eduardo-ci/cipherpass_pro/${CLI_VERSION}/cipherpass_cli.py" -o "$CLI_SCRIPT" || echo_err "Fallo al descargar cipherpass_cli.py."
+        curl -fsSL "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/cipherpass_cli.py" -o "$CLI_SCRIPT" || echo_err "Fallo al descargar cipherpass_cli.py."
     elif command -v wget >/dev/null 2>&1; then
-        wget -qO "$CLI_SCRIPT" "https://raw.githubusercontent.com/Eduardo-ci/cipherpass_pro/${CLI_VERSION}/cipherpass_cli.py" || echo_err "Fallo al descargar cipherpass_cli.py."
+        wget -qO "$CLI_SCRIPT" "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/cipherpass_cli.py" || echo_err "Fallo al descargar cipherpass_cli.py."
     else
         echo_err "Necesitas tener instalado 'curl' o 'wget' para descargar los archivos."
     fi
@@ -156,7 +156,7 @@ else
     echo_err "No se encontró 'setup.py' ni 'pyproject.toml' en '$CORE_REPO_PATH' (ni en su posible subcarpeta anidada). No es posible instalar cipherpass_core como paquete de Python. Verifica que el repositorio tenga metadata de empaquetado válida."
 fi
 
-echo_info "Preparando CipherPass CLI en $INSTALL_DIR..."
+echo_info "Preparando CelarPass CLI en $INSTALL_DIR..."
 
 # Detectar y preparar entorno virtual
 VENV_IS_NEW=0
@@ -218,7 +218,7 @@ fi
 echo_info "Creando ejecutable global en $BIN_LINK..."
 cat > "$BIN_LINK" << EOF
 #!/usr/bin/env bash
-# Wrapper generado automáticamente para CipherPass CLI
+# Wrapper generado automáticamente para CelarPass CLI
 # Ejecuta el script dentro de su propio entorno virtual aislado
 set -euo pipefail
 source "$VENV_DIR/bin/activate"
@@ -227,6 +227,6 @@ EOF
 
 chmod +x "$BIN_LINK"
 
-echo_info "✅ CipherPass CLI instalado exitosamente."
+echo_info "✅ CelarPass CLI instalado exitosamente."
 echo_info "Ahora puedes usar la herramienta globalmente en tu terminal:"
-echo -e "  ${GREEN}cipherpass-cli --help${NC}"
+echo -e "  ${GREEN}celarpass-cli --help${NC}"

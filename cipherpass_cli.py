@@ -108,17 +108,17 @@ def output_result(data_to_copy, json_dict, json_flag, copy_flag, success_msg, ri
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CipherPass CLI - Advanced Cryptographic Tool\nSecurely generate passwords, tokens, check data breaches, and manage encrypted vaults.",
+        description="CelarPass CLI - Advanced Cryptographic Tool\nSecurely generate passwords, tokens, check data breaches, and manage encrypted vaults.",
         epilog="""
 Examples of common tasks:
   1. Generate a 20-character password, analyze it and copy to clipboard:
-     cipherpass-cli generate -l 20 --analyze --copy
+     celarpass-cli generate -l 20 --analyze --copy
   
   2. Generate a TOTP secret for an authenticator app:
-     cipherpass-cli totp -a user@example.com -i MyCompany
+     celarpass-cli totp -a user@example.com -i MyCompany
   
   3. Check if a password was exposed in data breaches (interactive):
-     cipherpass-cli hibp
+     celarpass-cli hibp
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -132,9 +132,9 @@ Examples of common tasks:
         description="Generates a cryptographically secure random password using the system's CSPRNG.",
         epilog="""
 Examples:
-  cipherpass-cli generate                        (Default 16 chars)
-  cipherpass-cli generate -l 24 --no-syms -c     (24 chars, no symbols, copy)
-  cipherpass-cli generate --analyze              (Show entropy and crack time)
+  celarpass-cli generate                        (Default 16 chars)
+  celarpass-cli generate -l 24 --no-syms -c     (24 chars, no symbols, copy)
+  celarpass-cli generate --analyze              (Show entropy and crack time)
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -153,8 +153,8 @@ Examples:
         description="Generates a Time-Based One-Time Password (TOTP) secret base32 key and its provisioning URI (otpauth://).",
         epilog="""
 Examples:
-  cipherpass-cli totp -a admin@company.com -i "Prod Server"
-  cipherpass-cli totp -a user -i "Local VPN" --copy
+  celarpass-cli totp -a admin@company.com -i "Prod Server"
+  celarpass-cli totp -a user -i "Local VPN" --copy
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -169,9 +169,9 @@ Examples:
         description="Generates random URL-safe or hexadecimal tokens, Bearer strings, or UUIDs for API keys or session identifiers.",
         epilog="""
 Examples:
-  cipherpass-cli token -m 0 -l 64     (64-byte URL-safe token)
-  cipherpass-cli token -m 2           (Standard UUID v4)
-  cipherpass-cli token -m 3 -l 32     (Bearer token)
+  celarpass-cli token -m 0 -l 64     (64-byte URL-safe token)
+  celarpass-cli token -m 2           (Standard UUID v4)
+  celarpass-cli token -m 3 -l 32     (Bearer token)
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -188,8 +188,8 @@ Examples:
         description="Checks the Have I Been Pwned API using K-Anonymity. The password is never sent in plaintext; only the first 5 characters of its SHA-1 hash are transmitted.",
         epilog="""
 Examples:
-  cipherpass-cli hibp                     (Prompts securely without showing chars)
-  echo "mypassword" | cipherpass-cli hibp (Reads from stdin for scripts)
+  celarpass-cli hibp                     (Prompts securely without showing chars)
+  echo "mypassword" | celarpass-cli hibp (Reads from stdin for scripts)
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -204,8 +204,8 @@ Examples:
         description="Encrypts arbitrary text using AES-256-GCM. The master key is derived securely via PBKDF2 or Argon2id.",
         epilog="""
 Examples:
-  echo '{"secret": 123}' | cipherpass-cli vault-export - --argon2 > vault.cpv
-  cipherpass-cli vault-export "My secret message"
+  echo '{"secret": 123}' | celarpass-cli vault-export - --argon2 > vault.cpv
+  celarpass-cli vault-export "My secret message"
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
@@ -221,8 +221,8 @@ Examples:
         description="Decrypts a vault file or string using the master password.",
         epilog="""
 Examples:
-  cat vault.cpv | cipherpass-cli vault-import -
-  cipherpass-cli vault-import "eyJhbG..." 
+  cat vault.cpv | celarpass-cli vault-import -
+  celarpass-cli vault-import "eyJhbG..." 
         """,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )

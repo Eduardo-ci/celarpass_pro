@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # 📦 Configuración del paquete
-APP_NAME="cipherpass"
+APP_NAME="celarpass"
 VERSION="1.0.4"
 ARCH="amd64"
 DEB_FILE="${APP_NAME}_${VERSION}_${ARCH}.deb"
@@ -128,7 +128,7 @@ prepare_deb_structure() {
     # Archivo .desktop
     cat > "$DEB_DIR/usr/share/applications/$APP_NAME.desktop" << 'EOF'
 [Desktop Entry]
-Name=CipherPass
+Name=CelarPass
 Exec=/usr/bin/cipherpass
 Icon=utilities-terminal
 Type=Application

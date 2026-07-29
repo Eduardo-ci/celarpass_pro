@@ -1,6 +1,6 @@
-# Contribuyendo a CipherPass 🤝
+# Contribuyendo a CelarPass 🤝
 
-¡Gracias por tu interés en contribuir a **CipherPass**! Al ser un proyecto de código abierto bajo la licencia GNU AGPLv3, la colaboración de la comunidad es esencial para mantener y mejorar la seguridad, funcionalidad y accesibilidad de la aplicación.
+¡Gracias por tu interés en contribuir a **CelarPass**! Al ser un proyecto de código abierto bajo la licencia GNU AGPLv3, la colaboración de la comunidad es esencial para mantener y mejorar la seguridad, funcionalidad y accesibilidad de la aplicación.
 
 Este documento te guiará sobre cómo puedes colaborar en el proyecto.
 
@@ -10,19 +10,19 @@ Hay muchas formas de contribuir, no todo requiere escribir código:
 
 1. **Reportar Errores (Bugs):** Si encuentras un fallo, abre un *Issue* describiendo el problema, cómo reproducirlo y tu entorno (SO, versión de Python).
 2. **Sugerir Mejoras:** ¿Tienes una idea genial? Abre un *Issue* con la etiqueta `enhancement` explicando tu propuesta y cómo beneficiaría a los usuarios.
-3. **Traducciones (I18n):** CipherPass soporta múltiples idiomas. Puedes ayudar a mejorar las traducciones existentes o agregar nuevos idiomas (ver sección de traducciones).
+3. **Traducciones (I18n):** CelarPass soporta múltiples idiomas. Puedes ayudar a mejorar las traducciones existentes o agregar nuevos idiomas (ver sección de traducciones).
 4. **Escribir Código:** Puedes resolver *Issues* abiertos, mejorar la eficiencia del motor criptográfico (`cipherpass_core`), o añadir nuevas funcionalidades a la interfaz.
 5. **Mejorar Documentación:** Ayuda a hacer los manuales, *READMEs* o comentarios en el código más claros y accesibles.
 
 ## 💻 Entorno de Desarrollo
 
-Para empezar a programar en CipherPass, sigue estos pasos:
+Para empezar a programar en CelarPass, sigue estos pasos:
 
 1. **Haz un Fork del repositorio** haciendo clic en el botón "Fork" en la parte superior derecha de la página de GitHub.
 2. **Clona tu Fork localmente:**
    ```bash
-   git clone https://github.com/Eduardo-ci/cipherpass_pro.git
-   cd CipherPass_Pro
+   git clone https://github.com/Eduardo-ci/celarpass_pro.git
+   cd CelarPass_Pro
    ```
 3. **Crea un entorno virtual:**
    ```bash
@@ -46,7 +46,7 @@ Para empezar a programar en CipherPass, sigue estos pasos:
 
 ## 🌍 Traducciones (Localización)
 
-CipherPass utiliza el sistema de traducción de Qt (archivos `.ts` y `.qm`). 
+CelarPass utiliza el sistema de traducción de Qt (archivos `.ts` y `.qm`). 
 Para actualizar o crear una traducción:
 
 1. Modifica los archivos `.ui` o el código en `main.py`.
@@ -76,4 +76,4 @@ Para actualizar o crear una traducción:
 
 ## 📄 Licencia y Contribuciones
 
-Al enviar un Pull Request a CipherPass, aceptas que tus contribuciones se licenciarán bajo la **GNU AGPLv3**, al igual que el resto del proyecto. Esto asegura que el código y tus mejoras permanezcan libres y abiertos para siempre.
+Al enviar un Pull Request a CelarPass, aceptas que tus contribuciones se licenciarán bajo la **GNU AGPLv3**, al igual que el resto del proyecto. Esto asegura que el código y tus mejoras permanezcan libres y abiertos para siempre.

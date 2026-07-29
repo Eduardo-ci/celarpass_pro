@@ -96,7 +96,7 @@ def resource_path(relative_path: str) -> str:
 class SettingsManager:
     """Gestiona la persistencia de configuraciones de la aplicación."""
     def __init__(self) -> None:
-        self.settings = QSettings("CipherPass", "CipherPassApp")
+        self.settings = QSettings("CelarPass", "CipherPassApp")
 
     def get_language(self) -> str:
         return str(self.settings.value("language", "es")).strip()
@@ -188,7 +188,7 @@ class CryptoManager:
         Returns:
             Fernet: Instancia de Fernet inicializada con la clave local.
         """
-        config_dir = user_config_dir("CipherPass", "CipherPassApp")
+        config_dir = user_config_dir("CelarPass", "CipherPassApp")
         os.makedirs(config_dir, exist_ok=True)
         key_file = os.path.join(config_dir, "secret.key")
         
@@ -406,7 +406,7 @@ class CipherPassApp(QMainWindow):
         self.load_translation(self.current_locale.name().split("_")[0])
         self.load_ui_file()
         if self.ui:
-            self.setWindowTitle("CipherPass")
+            self.setWindowTitle("CelarPass")
             self.show()
 
     def _secure_clear_line_edit(self, widget: QLineEdit) -> None:
@@ -638,7 +638,7 @@ class CipherPassApp(QMainWindow):
         
         ayuda_text = QCoreApplication.translate("CipherPassApp", "Ayuda")
         docs_text = QCoreApplication.translate("CipherPassApp", "Documentación en línea")
-        acerca_text = QCoreApplication.translate("CipherPassApp", "Acerca de CipherPass...")
+        acerca_text = QCoreApplication.translate("CipherPassApp", "Acerca de CelarPass...")
         seguridad_text = QCoreApplication.translate("CipherPassApp", "Seguridad...")
         
         # --- 1. Menú Archivo ---
@@ -746,7 +746,7 @@ class CipherPassApp(QMainWindow):
 
     @Slot()
     def open_documentation_action(self) -> None:
-        QDesktopServices.openUrl(QUrl("https://github.com/Eduardo-ci/cipherpass_pro"))
+        QDesktopServices.openUrl(QUrl("https://github.com/Eduardo-ci/celarpass_pro"))
 
     @Slot(str)
     def change_language_code(self, lang_code: str) -> None:
@@ -765,11 +765,11 @@ class CipherPassApp(QMainWindow):
         license_lbl = QCoreApplication.translate("CipherPassApp", "Licencia:")
         desc_lbl = QCoreApplication.translate("CipherPassApp", "Aplicación de código abierto diseñada para generar, validar y proteger credenciales criptográficas asegurando tu privacidad offline-first.")
         visit_lbl = QCoreApplication.translate("CipherPassApp", "Visitar el sitio web oficial")
-        about_title = QCoreApplication.translate("CipherPassApp", "Acerca de CipherPass")
+        about_title = QCoreApplication.translate("CipherPassApp", "Acerca de CelarPass")
         
         # QMessageBox.about interpreta HTML nativamente
         texto_html = (
-            f"<h2>CipherPass</h2>"
+            f"<h2>CelarPass</h2>"
             f"<p><b>{version_lbl}</b> {VERSION}</p>"
             f"<p><b>{license_lbl}</b> {estado}</p>"
             f"<hr>"
@@ -971,7 +971,7 @@ class CipherPassApp(QMainWindow):
                 self._tray_icon.setIcon(self.windowIcon())
                 self._tray_icon.show()
             self._tray_icon.showMessage(
-                QCoreApplication.translate("CipherPassApp", "CipherPass Pro"), msg,
+                QCoreApplication.translate("CipherPassApp", "CelarPass Pro"), msg,
                 QSystemTrayIcon.MessageIcon.Information, 3000
             )
 
@@ -1087,7 +1087,7 @@ class CipherPassApp(QMainWindow):
         use_argon2 = (self.ui.comboBox_vault_kdf.currentIndex() == 0) and HAS_ARGON2
         try:
             enc_data = self.vault_exporter.export_vault(data, pwd, use_argon2)
-            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CipherPassApp", "Guardar Bóveda"), "", "CipherPass Vault (*.cpv);;JSON Files (*.json)")
+            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CipherPassApp", "Guardar Bóveda"), "", "CelarPass Vault (*.cpv);;JSON Files (*.json)")
             if save_path:
                 with open(save_path, 'w', encoding='utf-8') as f:
                     f.write(enc_data)
@@ -1099,7 +1099,7 @@ class CipherPassApp(QMainWindow):
 
     @Slot()
     def browse_vault_file(self) -> None:
-        file_path, _ = QFileDialog.getOpenFileName(self, QCoreApplication.translate("CipherPassApp", "Abrir Bóveda"), "", "CipherPass Vault (*.cpv *.json);;All Files (*)")
+        file_path, _ = QFileDialog.getOpenFileName(self, QCoreApplication.translate("CipherPassApp", "Abrir Bóveda"), "", "CelarPass Vault (*.cpv *.json);;All Files (*)")
         if file_path: self.ui.lineEdit_import_path.setText(file_path)
 
     @Slot()
@@ -1161,11 +1161,11 @@ class CipherPassApp(QMainWindow):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
-        print("CipherPass - Generador y validador de contraseñas criptográficas")
+        print("CelarPass - Generador y validador de contraseñas criptográficas")
         print("\nUso:")
         print("  cipherpass             Inicia la aplicación gráfica")
-        print("  cipherpass-cli         Inicia la interfaz de línea de comandos (CLI)")
-        print("\nPara ver las opciones de la CLI, ejecuta: cipherpass-cli --help")
+        print("  celarpass-cli         Inicia la interfaz de línea de comandos (CLI)")
+        print("\nPara ver las opciones de la CLI, ejecuta: celarpass-cli --help")
         sys.exit(0)
 
     app = QApplication(sys.argv)

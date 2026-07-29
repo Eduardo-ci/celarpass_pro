@@ -3,7 +3,7 @@
 set -euo pipefail
 
 # 📦 Configuración del paquete
-APP_NAME="cipherpass"
+APP_NAME="celarpass"
 VERSION="1.0.4"
 ARCH="x86_64"
 APPDIR="AppDir"
@@ -137,7 +137,7 @@ prepare_appdir() {
     # Archivo .desktop (requerido por AppImage)
     cat > "$APPDIR/$APP_NAME.desktop" << EOF
 [Desktop Entry]
-Name=CipherPass
+Name=CelarPass
 Exec=$APP_NAME
 Icon=$APP_NAME
 Type=Application

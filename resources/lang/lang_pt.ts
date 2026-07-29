@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../../main.py" line="641"/>
-        <source>Acerca de CipherPass...</source>
-        <translation>Sobre o CipherPass...</translation>
+        <source>Acerca de CelarPass...</source>
+        <translation>Sobre o CelarPass...</translation>
     </message>
     <message>
         <location filename="../../main.py" line="637"/>
@@ -195,8 +195,8 @@
     </message>
     <message>
         <location filename="../../main.py" line="768"/>
-        <source>Acerca de CipherPass</source>
-        <translation>Sobre o CipherPass</translation>
+        <source>Acerca de CelarPass</source>
+        <translation>Sobre o CelarPass</translation>
     </message>
     <message>
         <location filename="../../main.py" line="812"/>
@@ -267,8 +267,8 @@
     </message>
     <message>
         <location filename="../../main.py" line="974"/>
-        <source>CipherPass Pro</source>
-        <translation>CipherPass Pro</translation>
+        <source>CelarPass Pro</source>
+        <translation>CelarPass Pro</translation>
     </message>
     <message>
         <location filename="../../main.py" line="1032"/>
@@ -483,8 +483,8 @@ Use um segredo manual.</translation>
     <name>MainWindow</name>
     <message>
         <location filename="../../ui/main.ui" line="20"/>
-        <source>CipherPass</source>
-        <translation>CipherPass</translation>
+        <source>CelarPass</source>
+        <translation>CelarPass</translation>
     </message>
     <message>
         <location filename="../../ui/main.ui" line="125"/>

@@ -11,7 +11,7 @@ Por favor, utiliza siempre la última versión disponible para garantizar que cu
 
 ## Reporting a Vulnerability
 
-Nos tomamos muy en serio la seguridad de Cipherpass Pro. Si descubres una vulnerabilidad de seguridad, por favor infórmanos de forma privada.
+Nos tomamos muy en serio la seguridad de CelarPass Pro. Si descubres una vulnerabilidad de seguridad, por favor infórmanos de forma privada.
 
 **NO** abras un Issue público en GitHub para reportar problemas de seguridad. 
 

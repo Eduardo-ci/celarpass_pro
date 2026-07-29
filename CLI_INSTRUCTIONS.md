@@ -1,4 +1,4 @@
-# CipherPass CLI - User Manual / Manual de Uso
+# CelarPass CLI - User Manual / Manual de Uso
 
 *(Scroll down for the Spanish version / Desplázate hacia abajo para la versión en español)*
 
@@ -6,11 +6,11 @@
 
 # 🇬🇧 English Version
 
-`cipherpass-cli` is a cryptographic tool designed for SysAdmins, offering features such as password generation, validation against exposed password databases (Have I Been Pwned), and secure data encryption/decryption (vaults).
+`celarpass-cli` is a cryptographic tool designed for SysAdmins, offering features such as password generation, validation against exposed password databases (Have I Been Pwned), and secure data encryption/decryption (vaults).
 
 ## Basic Usage
 ```bash
-cipherpass-cli [command] [arguments...]
+celarpass-cli [command] [arguments...]
 ```
 
 ### Global Arguments
@@ -35,10 +35,10 @@ Generates a secure, cryptographically strong password.
 **Examples:**
 ```bash
 # Generate a standard 16-character password
-cipherpass-cli generate
+celarpass-cli generate
 
 # Generate and analyze a 24-character password, then copy it to clipboard
-cipherpass-cli generate -l 24 --analyze -c
+celarpass-cli generate -l 24 --analyze -c
 ```
 
 ---
@@ -51,7 +51,7 @@ Generates a new random Base32 secret, ready to be used in two-factor authenticat
 
 **Example:**
 ```bash
-cipherpass-cli totp -c
+celarpass-cli totp -c
 ```
 
 ---
@@ -65,10 +65,10 @@ Checks if a password has been exposed in data breaches using the *Have I Been Pw
 **Example:**
 ```bash
 # Interactive mode
-cipherpass-cli hibp
+celarpass-cli hibp
 
 # Automation / Pipeline mode
-echo "mypassword123" | cipherpass-cli hibp --json
+echo "mypassword123" | celarpass-cli hibp --json
 ```
 
 ---
@@ -84,8 +84,8 @@ Encrypts text or confidential information using AES-GCM to be stored in a secure
 
 **Examples:**
 ```bash
-cipherpass-cli vault-export "My top secret info" --argon2
-echo "Secret text" | cipherpass-cli vault-export -
+celarpass-cli vault-export "My top secret info" --argon2
+echo "Secret text" | celarpass-cli vault-export -
 ```
 
 ---
@@ -100,7 +100,7 @@ Takes the JSON data from a previously exported vault and decrypts it, returning 
 
 **Example:**
 ```bash
-cat vault.json | cipherpass-cli vault-import -
+cat vault.json | celarpass-cli vault-import -
 ```
 
 ---
@@ -119,8 +119,8 @@ Generates a secure token to be used in APIs, cloud services, or universal unique
 
 **Examples:**
 ```bash
-cipherpass-cli token --mode 2
-cipherpass-cli token -m 3 -l 64 -c
+celarpass-cli token --mode 2
+celarpass-cli token -m 3 -l 64 -c
 ```
 
 <br><br><br>
@@ -129,11 +129,11 @@ cipherpass-cli token -m 3 -l 64 -c
 
 # 🇪🇸 Versión en Español
 
-`cipherpass-cli` es una herramienta criptográfica diseñada para SysAdmins que ofrece funcionalidades como la generación de contraseñas, validación en bases de datos de contraseñas expuestas y cifrado/descifrado seguro de datos (bóvedas).
+`celarpass-cli` es una herramienta criptográfica diseñada para SysAdmins que ofrece funcionalidades como la generación de contraseñas, validación en bases de datos de contraseñas expuestas y cifrado/descifrado seguro de datos (bóvedas).
 
 ## Uso Básico
 ```bash
-cipherpass-cli [comando] [argumentos...]
+celarpass-cli [comando] [argumentos...]
 ```
 
 ### Argumentos Globales
@@ -158,10 +158,10 @@ Genera una contraseña segura y criptográficamente fuerte.
 **Ejemplos de uso:**
 ```bash
 # Generar una contraseña estándar de 16 caracteres
-cipherpass-cli generate
+celarpass-cli generate
 
 # Generar y analizar una contraseña de 24 caracteres, y copiar al portapapeles
-cipherpass-cli generate -l 24 --analyze -c
+celarpass-cli generate -l 24 --analyze -c
 ```
 
 ---
@@ -174,7 +174,7 @@ Genera un nuevo secreto aleatorio en Base32, listo para ser utilizado en aplicac
 
 **Ejemplo de uso:**
 ```bash
-cipherpass-cli totp -c
+celarpass-cli totp -c
 ```
 
 ---
@@ -188,10 +188,10 @@ Comprueba si una contraseña ha sido expuesta en filtraciones de datos, haciendo
 **Ejemplo de uso:**
 ```bash
 # Modo interactivo
-cipherpass-cli hibp
+celarpass-cli hibp
 
 # Modo automatizado / Pipes
-echo "miclavesecreta" | cipherpass-cli hibp --json
+echo "miclavesecreta" | celarpass-cli hibp --json
 ```
 
 ---
@@ -207,8 +207,8 @@ Cifra un texto o información confidencial utilizando AES-GCM para ser almacenad
 
 **Ejemplos de uso:**
 ```bash
-cipherpass-cli vault-export "Mi información ultrasecreta" --argon2
-echo "Texto secreto" | cipherpass-cli vault-export -
+celarpass-cli vault-export "Mi información ultrasecreta" --argon2
+echo "Texto secreto" | celarpass-cli vault-export -
 ```
 
 ---
@@ -223,7 +223,7 @@ Recibe los datos en formato JSON de una bóveda previamente exportada y los desc
 
 **Ejemplo de uso:**
 ```bash
-cat boveda.json | cipherpass-cli vault-import -
+cat boveda.json | celarpass-cli vault-import -
 ```
 
 ---
@@ -242,6 +242,6 @@ Genera un token seguro para ser utilizado en APIs, servicios en la nube, o ident
 
 **Ejemplos de uso:**
 ```bash
-cipherpass-cli token --mode 2
-cipherpass-cli token -m 3 -l 64 -c
+celarpass-cli token --mode 2
+celarpass-cli token -m 3 -l 64 -c
 ```
