@@ -41,7 +41,7 @@ jobs:
             --include-data-dir="ui=ui" `
             --include-package=cipherpass_core `
             --output-dir="dist" `
-            --output-filename="cipherpass.exe" `
+            --output-filename="celarpass.exe" `
             --remove-output `
             --disable-console `
             --assume-yes-for-downloads `
@@ -53,5 +53,5 @@ jobs:
       - name: Subir Artefacto (Instalador Windows)
         uses: actions/upload-artifact@v7
         with:
-          name: cipherpass-windows-setup
-          path: dist/CipherPass_Setup.exe
+          name: celarpass-windows-setup
+          path: dist/CelarPass_Setup.exe
