@@ -126,10 +126,10 @@ prepare_deb_structure() {
     ln -s "/opt/$APP_NAME/$APP_NAME" "$DEB_DIR/usr/bin/$APP_NAME"
 
     # Archivo .desktop
-    cat > "$DEB_DIR/usr/share/applications/$APP_NAME.desktop" << 'EOF'
+    cat > "$DEB_DIR/usr/share/applications/$APP_NAME.desktop" << EOF
 [Desktop Entry]
 Name=CelarPass
-Exec=/usr/bin/cipherpass
+Exec=/usr/bin/$APP_NAME
 Icon=utilities-terminal
 Type=Application
 Categories=Utility;Security;
