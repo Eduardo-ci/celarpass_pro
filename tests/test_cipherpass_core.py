@@ -52,6 +52,36 @@ class TestStrengthAnalyzer(unittest.TestCase):
         self.assertTrue(val >= 80)
         self.assertEqual(color, "#2ecc71")  # Color verde (Fuerte)
 
+    def test_analyze_password_pattern(self):
+        from cipherpass_core.analyzers import analyze_password
+        # Contraseña con patrón claro (diccionario + símbolo)
+        results = analyze_password("Password123!")
+        # Debe identificar el patrón y no sobrestimar
+        self.assertTrue(results['guesses'] < 10**8, "Debe detectar el patrón débil")
+
+    def test_analyze_password_random_short(self):
+        from cipherpass_core.analyzers import analyze_password
+        import string, random
+        # Contraseña aleatoria de 8 caracteres con todos los tipos
+        chars = string.ascii_letters + string.digits + "!@#"
+        pwd = ''.join(random.choice(chars) for _ in range(8))
+        results = analyze_password(pwd)
+        # La entropía matemática de 8 chars con pool ~65 es ~65^8 = 3.18e14
+        # Si zxcvbn la marca como fuerza bruta, el fix debe sobrescribir
+        if len(results['sequence']) == 1 and results['sequence'][0].get("pattern") == "bruteforce":
+            self.assertTrue(results['guesses'] > 10**14, "Debe aplicar la cardinalidad matemática")
+
+    def test_analyze_password_random_long(self):
+        from cipherpass_core.analyzers import analyze_password
+        import string, random
+        # Contraseña aleatoria de 20 caracteres con todos los tipos
+        chars = string.ascii_letters + string.digits + "!@#"
+        pwd = ''.join(random.choice(chars) for _ in range(20))
+        results = analyze_password(pwd)
+        # La entropía matemática de 20 chars con pool ~65 es ~65^20 = 1.8e36
+        if len(results['sequence']) == 1 and results['sequence'][0].get("pattern") == "bruteforce":
+            self.assertTrue(results['guesses'] > 10**35, "Debe aplicar la cardinalidad matemática para contraseñas largas")
+
 class TestVaultExporter(unittest.TestCase):
     def setUp(self):
         self.vault = VaultExporter()

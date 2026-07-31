@@ -8,7 +8,7 @@ import time
 import atexit
 import subprocess
 import os
-from zxcvbn import zxcvbn
+from cipherpass_core.analyzers import analyze_password
 from rich.console import Console
 from rich.table import Table
 
@@ -257,13 +257,13 @@ Examples:
         )
                 
         if not args.json and args.analyze:
-            analysis = zxcvbn(pwd)
+            analysis = analyze_password(pwd)
             table = Table(title="Password Analysis")
             table.add_column("Metric", style="cyan")
             table.add_column("Value", style="magenta")
             table.add_row("Score", f"{analysis['score']} / 4")
-            table.add_row("Entropy (Guesses)", str(analysis['guesses']))
-            table.add_row("Crack Time", analysis['crack_times_display']['offline_fast_hashing_1e10_per_second'])
+            table.add_row("Entropy (Guesses)", f"{analysis['guesses']:,}")
+            table.add_row("Crack Time", analysis.get('crack_times_display', {}).get('offline_fast_hashing_1e10_per_second', '...'))
             if analysis['feedback']['warning']:
                 table.add_row("Warning", f"[red]{analysis['feedback']['warning']}[/red]")
             console.print(table)

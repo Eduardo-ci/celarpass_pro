@@ -148,12 +148,17 @@ fi
 # en la raíz). Detectamos cuál es el caso e instalamos la carpeta correcta
 # con pip, en vez de asumir una estructura fija. Esto cubre tanto Modo Local
 # como Standalone con la misma lógica, evitando que se desincronicen entre sí.
+PIP_INSTALL_TARGET=""
 if [ -f "$CORE_REPO_PATH/setup.py" ] || [ -f "$CORE_REPO_PATH/pyproject.toml" ]; then
     PIP_INSTALL_TARGET="$CORE_REPO_PATH"
 elif [ -f "$CORE_REPO_PATH/cipherpass_core/setup.py" ] || [ -f "$CORE_REPO_PATH/cipherpass_core/pyproject.toml" ]; then
     PIP_INSTALL_TARGET="$CORE_REPO_PATH/cipherpass_core"
 else
-    echo_err "No se encontró 'setup.py' ni 'pyproject.toml' en '$CORE_REPO_PATH' (ni en su posible subcarpeta anidada). No es posible instalar cipherpass_core como paquete de Python. Verifica que el repositorio tenga metadata de empaquetado válida."
+    if [ "$CURRENT_DIR" = "$INSTALL_DIR" ]; then
+        echo_warn "No se encontró 'setup.py' ni 'pyproject.toml' en modo local. Se omitirá la instalación de cipherpass_core con pip."
+    else
+        echo_err "No se encontró 'setup.py' ni 'pyproject.toml' en '$CORE_REPO_PATH' (ni en su posible subcarpeta anidada). No es posible instalar cipherpass_core como paquete de Python. Verifica que el repositorio tenga metadata de empaquetado válida."
+    fi
 fi
 
 echo_info "Preparando CelarPass CLI en $INSTALL_DIR..."
