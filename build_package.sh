@@ -116,11 +116,16 @@ build_executable() {
 prepare_deb_structure() {
     echo_info "🗂 Preparando estructura .deb..."
     rm -rf "$DEB_DIR"
-    mkdir -p "$DEB_DIR"/{DEBIAN,usr/{bin,share/applications},opt/"$APP_NAME"}
+    mkdir -p "$DEB_DIR"/{DEBIAN,usr/{bin,share/applications,share/pixmaps},opt/"$APP_NAME"}
 
     # Copiar binario y permisos
     cp "$DIST_DIR/$APP_NAME" "$DEB_DIR/opt/$APP_NAME/"
     chmod 755 "$DEB_DIR/opt/$APP_NAME/$APP_NAME"
+    
+    # Copiar icono para el sistema
+    if [ -f "cipherpass.png" ]; then
+        cp "cipherpass.png" "$DEB_DIR/usr/share/pixmaps/${APP_NAME}.png"
+    fi
 
     # Enlace global en /usr/bin
     ln -s "/opt/$APP_NAME/$APP_NAME" "$DEB_DIR/usr/bin/$APP_NAME"
@@ -130,7 +135,7 @@ prepare_deb_structure() {
 [Desktop Entry]
 Name=CelarPass
 Exec=/usr/bin/$APP_NAME
-Icon=utilities-terminal
+Icon=$APP_NAME
 Type=Application
 Categories=Utility;Security;
 Comment=Generador y validador de contraseñas criptográficas
