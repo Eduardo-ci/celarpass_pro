@@ -28,7 +28,7 @@ CLI_VERSION="v1.0.4"
 # CORE_VERSION usa el hash completo del commit porque el repositorio
 # celarpass_core aún no tiene tags de release. Un hash de commit es
 # inmutable y más seguro que apuntar a una rama.
-CORE_VERSION="025db8e9f88251accfc9a09f64483c216fc1c080"
+CORE_VERSION="d3e635ffb5d54b91e8c2bc072699835678f6260b"
 
 # Ubicación del ejecutable a nivel de usuario (evita requerir sudo)
 BIN_LINK="$HOME/.local/bin/celarpass-cli"
@@ -112,7 +112,7 @@ else
     fi
 
     # Verificación de integridad del script descargado (SHA256 para la versión v1.0.4)
-    EXPECTED_SHA="b99c50386d3520b8e080f5c973eeffc892a66e4dc09c64204f5514725c0ec93e"
+    EXPECTED_SHA="580db83f59f17564b64b486bdca0fb136ee99081bdcad1dcb3fafdbe88dd6439"
     ACTUAL_SHA=$(sha256sum "$CLI_SCRIPT" | cut -d' ' -f1)
     if [ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]; then
         rm -f "$CLI_SCRIPT"
@@ -134,7 +134,7 @@ else
     # Verificación de integridad del repositorio criptográfico base.
     # Comparamos el commit HEAD actual contra el hash esperado para asegurar
     # que el código clonado no fue alterado.
-    EXPECTED_CORE_COMMIT="025db8e9f88251accfc9a09f64483c216fc1c080"
+    EXPECTED_CORE_COMMIT="d3e635ffb5d54b91e8c2bc072699835678f6260b"
     ACTUAL_CORE_COMMIT=$(git -C "$CORE_REPO_PATH" rev-parse HEAD)
     if [ "$ACTUAL_CORE_COMMIT" != "$EXPECTED_CORE_COMMIT" ]; then
         rm -rf "$CORE_REPO_PATH"
