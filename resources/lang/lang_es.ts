@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="es_ES">
 <context>
-    <name>CipherPassApp</name>
+    <name>CelarPassApp</name>
     <message>
         <location filename="../../main.py" line="639"/>
         <source>Ayuda</source>
@@ -410,59 +410,59 @@ Usa el secreto manual.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="26"/>
+        <location filename="../../celarpass_core/analyzers.py" line="79"/>
         <source>Muchos caracteres repetidos</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="29"/>
+        <location filename="../../celarpass_core/analyzers.py" line="82"/>
         <source>Muy Débil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="31"/>
-        <location filename="../../cipherpass_core/analyzers.py" line="50"/>
-        <location filename="../../cipherpass_core/analyzers.py" line="56"/>
+        <location filename="../../celarpass_core/analyzers.py" line="84"/>
+        <location filename="../../celarpass_core/analyzers.py" line="103"/>
+        <location filename="../../celarpass_core/analyzers.py" line="109"/>
         <source>Débil</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="33"/>
+        <location filename="../../celarpass_core/analyzers.py" line="86"/>
         <source>Regular</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="35"/>
+        <location filename="../../celarpass_core/analyzers.py" line="88"/>
         <source>Buena</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="37"/>
+        <location filename="../../celarpass_core/analyzers.py" line="90"/>
         <source>Muy Fuerte</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="58"/>
+        <location filename="../../celarpass_core/analyzers.py" line="111"/>
         <source>Moderada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/analyzers.py" line="60"/>
+        <location filename="../../celarpass_core/analyzers.py" line="113"/>
         <source>Fuerte</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/hibp.py" line="21"/>
+        <location filename="../../celarpass_core/hibp.py" line="21"/>
         <source>La librería &apos;requests&apos; no está instalada.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/hibp.py" line="39"/>
+        <location filename="../../celarpass_core/hibp.py" line="39"/>
         <source>Error HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../cipherpass_core/hibp.py" line="43"/>
+        <location filename="../../celarpass_core/hibp.py" line="43"/>
         <source>Error de conexión o timeout.</source>
         <translation type="unfinished"></translation>
     </message>

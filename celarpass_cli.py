@@ -8,13 +8,13 @@ import time
 import atexit
 import subprocess
 import os
-from cipherpass_core.analyzers import analyze_password
+from celarpass_core.analyzers import analyze_password
 from rich.console import Console
 from rich.table import Table
 
-from cipherpass_core.generators import PasswordEngine, TOTPEngine
-from cipherpass_core.hibp import HIBPClient
-from cipherpass_core.crypto_vault import VaultExporter
+from celarpass_core.generators import PasswordEngine, TOTPEngine
+from celarpass_core.hibp import HIBPClient
+from celarpass_core.crypto_vault import VaultExporter
 import pyperclip
 
 console = Console()

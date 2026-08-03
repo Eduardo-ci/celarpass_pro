@@ -35,11 +35,11 @@ jobs:
           python -m nuitka `
             --standalone `
             --onefile `
-            --windows-icon-from-ico="resources\icons\cipherpass.ico" `
+            --windows-icon-from-ico="resources\icons\celarpass.ico" `
             --enable-plugin=pyside6 `
             --include-data-dir="resources=resources" `
             --include-data-dir="ui=ui" `
-            --include-package=cipherpass_core `
+            --include-package=celarpass_core `
             --output-dir="dist" `
             --output-filename="celarpass.exe" `
             --remove-output `

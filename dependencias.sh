@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dependencias.sh — Instalador de dependencias de CipherPass Pro
+# dependencias.sh — Instalador de dependencias de CelarPass Pro
 # Debe ejecutarse DENTRO de un entorno virtual activo.
 set -euo pipefail
 

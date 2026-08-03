@@ -1,6 +1,6 @@
 import unittest
 import urllib.parse
-from cipherpass_core.generators import TOTPEngine
+from celarpass_core.generators import TOTPEngine
 
 class TestTOTPEngine(unittest.TestCase):
     def test_basic_uri(self):

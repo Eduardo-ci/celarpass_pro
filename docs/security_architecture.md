@@ -1,12 +1,12 @@
 # Arquitectura de Seguridad 🛡️
 
-CipherPass PRO fue diseñado desde cero con un enfoque de seguridad proactiva y **offline-first**. En esta sección detallamos las decisiones arquitectónicas y los algoritmos criptográficos que garantizan la privacidad de tus datos.
+CelarPass PRO fue diseñado desde cero con un enfoque de seguridad proactiva y **offline-first**. En esta sección detallamos las decisiones arquitectónicas y los algoritmos criptográficos que garantizan la privacidad de tus datos.
 
 ## 1. Enfoque Offline-First
-La principal premisa de CipherPass es que **tus datos nunca abandonan tu dispositivo**. A diferencia de los gestores de contraseñas basados en la nube, CipherPass no sincroniza tus bóvedas ni tus contraseñas maestras con ningún servidor externo. Todo el cifrado y descifrado ocurre localmente en la memoria de tu computadora.
+La principal premisa de CelarPass es que **tus datos nunca abandonan tu dispositivo**. A diferencia de los gestores de contraseñas basados en la nube, CelarPass no sincroniza tus bóvedas ni tus contraseñas maestras con ningún servidor externo. Todo el cifrado y descifrado ocurre localmente en la memoria de tu computadora.
 
 ## 2. Criptografía en Reposo (La Bóveda)
-Cuando decides exportar información sensible utilizando la función de Bóveda (Vault), CipherPass aplica los más altos estándares de cifrado simétrico:
+Cuando decides exportar información sensible utilizando la función de Bóveda (Vault), CelarPass aplica los más altos estándares de cifrado simétrico:
 
 *   **Algoritmo de Cifrado:** Se utiliza **AES-GCM** (Advanced Encryption Standard con Galois/Counter Mode). Este es un esquema de cifrado autenticado (AEAD) que no solo garantiza la confidencialidad de los datos, sino también su integridad, asegurando que el archivo no haya sido modificado maliciosamente.
 *   **Derivación de Claves (KDF):** Para convertir tu contraseña maestra humana en una clave criptográfica de 256 bits, utilizamos **Argon2id**. Este es el algoritmo ganador del *Password Hashing Competition*.

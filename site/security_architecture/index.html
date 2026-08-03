@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Documentación oficial y referencia de la API para CipherPass PRO.">
+        <meta name="description" content="Documentación oficial y referencia de la API para CelarPass PRO.">
       
       
         <meta name="author" content="Eduardo Mallo">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Arquitectura de Seguridad - CipherPass PRO</title>
+        <title>Arquitectura de Seguridad - CelarPass PRO</title>
       
     
     
@@ -90,7 +90,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="CipherPass PRO" class="md-header__button md-logo" aria-label="CipherPass PRO" data-md-component="logo">
+    <a href=".." title="CelarPass PRO" class="md-header__button md-logo" aria-label="CelarPass PRO" data-md-component="logo">
       
   <img src="../assets/logo.png" alt="logo">
 
@@ -103,7 +103,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            CipherPass PRO
+            CelarPass PRO
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -254,12 +254,12 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="CipherPass PRO" class="md-nav__button md-logo" aria-label="CipherPass PRO" data-md-component="logo">
+    <a href=".." title="CelarPass PRO" class="md-nav__button md-logo" aria-label="CelarPass PRO" data-md-component="logo">
       
   <img src="../assets/logo.png" alt="logo">
 
     </a>
-    CipherPass PRO
+    CelarPass PRO
   </label>
   
   <ul class="md-nav__list" data-md-scrollfix>
@@ -449,11 +449,11 @@
 
 
 <h1 id="arquitectura-de-seguridad">Arquitectura de Seguridad 🛡️</h1>
-<p>CipherPass PRO fue diseñado desde cero con un enfoque de seguridad proactiva y <strong>offline-first</strong>. En esta sección detallamos las decisiones arquitectónicas y los algoritmos criptográficos que garantizan la privacidad de tus datos.</p>
+<p>CelarPass PRO fue diseñado desde cero con un enfoque de seguridad proactiva y <strong>offline-first</strong>. En esta sección detallamos las decisiones arquitectónicas y los algoritmos criptográficos que garantizan la privacidad de tus datos.</p>
 <h2 id="1-enfoque-offline-first">1. Enfoque Offline-First</h2>
-<p>La principal premisa de CipherPass es que <strong>tus datos nunca abandonan tu dispositivo</strong>. A diferencia de los gestores de contraseñas basados en la nube, CipherPass no sincroniza tus bóvedas ni tus contraseñas maestras con ningún servidor externo. Todo el cifrado y descifrado ocurre localmente en la memoria de tu computadora.</p>
+<p>La principal premisa de CelarPass es que <strong>tus datos nunca abandonan tu dispositivo</strong>. A diferencia de los gestores de contraseñas basados en la nube, CelarPass no sincroniza tus bóvedas ni tus contraseñas maestras con ningún servidor externo. Todo el cifrado y descifrado ocurre localmente en la memoria de tu computadora.</p>
 <h2 id="2-criptografia-en-reposo-la-boveda">2. Criptografía en Reposo (La Bóveda)</h2>
-<p>Cuando decides exportar información sensible utilizando la función de Bóveda (Vault), CipherPass aplica los más altos estándares de cifrado simétrico:</p>
+<p>Cuando decides exportar información sensible utilizando la función de Bóveda (Vault), CelarPass aplica los más altos estándares de cifrado simétrico:</p>
 <ul>
 <li><strong>Algoritmo de Cifrado:</strong> Se utiliza <strong>AES-GCM</strong> (Advanced Encryption Standard con Galois/Counter Mode). Este es un esquema de cifrado autenticado (AEAD) que no solo garantiza la confidencialidad de los datos, sino también su integridad, asegurando que el archivo no haya sido modificado maliciosamente.</li>
 <li><strong>Derivación de Claves (KDF):</strong> Para convertir tu contraseña maestra humana en una clave criptográfica de 256 bits, utilizamos <strong>Argon2id</strong>. Este es el algoritmo ganador del <em>Password Hashing Competition</em>.<ul>

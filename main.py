@@ -53,10 +53,10 @@ from PySide6.QtCore import (
 from PySide6.QtGui import QClipboard, QPixmap, QImage, QDesktopServices
 from PySide6.QtUiTools import QUiLoader
 
-from cipherpass_core.generators import PasswordEngine, TOTPEngine, DEFAULT_SYMBOLS
-from cipherpass_core.analyzers import StrengthAnalyzer
-from cipherpass_core.crypto_vault import VaultExporter
-from cipherpass_core.hibp import HIBPClient
+from celarpass_core.generators import PasswordEngine, TOTPEngine, DEFAULT_SYMBOLS
+from celarpass_core.analyzers import StrengthAnalyzer
+from celarpass_core.crypto_vault import VaultExporter
+from celarpass_core.hibp import HIBPClient
 
 __all__ = [
     "SettingsManager",
@@ -65,7 +65,7 @@ __all__ = [
     "HIBPSignals",
     "HIBPWorker",
     "QRHelper",
-    "CipherPassApp",
+    "CelarPassApp",
     "resource_path",
     "VERSION"
 ]
@@ -96,7 +96,7 @@ def resource_path(relative_path: str) -> str:
 class SettingsManager:
     """Gestiona la persistencia de configuraciones de la aplicación."""
     def __init__(self) -> None:
-        self.settings = QSettings("CelarPass", "CipherPassApp")
+        self.settings = QSettings("CelarPass", "CelarPassApp")
 
     def get_language(self) -> str:
         return str(self.settings.value("language", "es")).strip()
@@ -188,7 +188,7 @@ class CryptoManager:
         Returns:
             Fernet: Instancia de Fernet inicializada con la clave local.
         """
-        config_dir = user_config_dir("CelarPass", "CipherPassApp")
+        config_dir = user_config_dir("CelarPass", "CelarPassApp")
         os.makedirs(config_dir, exist_ok=True)
         key_file = os.path.join(config_dir, "secret.key")
         
@@ -256,7 +256,7 @@ class QRHelper:
 class SecuritySettingsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle(QCoreApplication.translate("CipherPassApp", "Opciones de Seguridad"))
+        self.setWindowTitle(QCoreApplication.translate("CelarPassApp", "Opciones de Seguridad"))
         self.setModal(True)
         self.settings = SettingsManager()
         self.init_ui()
@@ -265,21 +265,21 @@ class SecuritySettingsDialog(QDialog):
     def init_ui(self):
         layout = QVBoxLayout(self)
 
-        self.fields_group = QGroupBox(QCoreApplication.translate("CipherPassApp", "Limpieza de campos sensibles"))
+        self.fields_group = QGroupBox(QCoreApplication.translate("CelarPassApp", "Limpieza de campos sensibles"))
         fields_layout = QVBoxLayout()
         
-        self.rb_field_tab = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar al cambiar de pestaña (Recomendado)"))
-        lbl_field_tab = QLabel(QCoreApplication.translate("CipherPassApp", "Máxima seguridad. Los campos generados se borran automáticamente al cambiar de pestaña."))
+        self.rb_field_tab = QRadioButton(QCoreApplication.translate("CelarPassApp", "Limpiar al cambiar de pestaña (Recomendado)"))
+        lbl_field_tab = QLabel(QCoreApplication.translate("CelarPassApp", "Máxima seguridad. Los campos generados se borran automáticamente al cambiar de pestaña."))
         lbl_field_tab.setWordWrap(True)
         lbl_field_tab.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
-        self.rb_field_exit = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar solo al cerrar la aplicación"))
-        lbl_field_exit = QLabel(QCoreApplication.translate("CipherPassApp", "Mejor experiencia. Puedes volver a ver los datos generados mientras la app esté abierta.\n⚠ Los datos permanecen visibles en pantalla."))
+        self.rb_field_exit = QRadioButton(QCoreApplication.translate("CelarPassApp", "Limpiar solo al cerrar la aplicación"))
+        lbl_field_exit = QLabel(QCoreApplication.translate("CelarPassApp", "Mejor experiencia. Puedes volver a ver los datos generados mientras la app esté abierta.\n⚠ Los datos permanecen visibles en pantalla."))
         lbl_field_exit.setWordWrap(True)
         lbl_field_exit.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
-        self.rb_field_timeout = QRadioButton(QCoreApplication.translate("CipherPassApp", "Limpiar tras 60 segundos de inactividad"))
-        lbl_field_timeout = QLabel(QCoreApplication.translate("CipherPassApp", "Balance entre seguridad y comodidad. Los campos se borran si no hay interacción durante 60 segundos al cambiar de pestaña."))
+        self.rb_field_timeout = QRadioButton(QCoreApplication.translate("CelarPassApp", "Limpiar tras 60 segundos de inactividad"))
+        lbl_field_timeout = QLabel(QCoreApplication.translate("CelarPassApp", "Balance entre seguridad y comodidad. Los campos se borran si no hay interacción durante 60 segundos al cambiar de pestaña."))
         lbl_field_timeout.setWordWrap(True)
         lbl_field_timeout.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
@@ -296,21 +296,21 @@ class SecuritySettingsDialog(QDialog):
         fields_layout.addWidget(lbl_field_timeout)
         self.fields_group.setLayout(fields_layout)
         
-        self.clip_group = QGroupBox(QCoreApplication.translate("CipherPassApp", "Limpieza del portapapeles"))
+        self.clip_group = QGroupBox(QCoreApplication.translate("CelarPassApp", "Limpieza del portapapeles"))
         clip_layout = QVBoxLayout()
         
-        self.rb_clip_full = QRadioButton(QCoreApplication.translate("CipherPassApp", "Borrar contenido e historial siempre"))
-        lbl_clip_full = QLabel(QCoreApplication.translate("CipherPassApp", "Al copiar y al cerrar, se limpia el contenido Y todo el historial del portapapeles.\n⚠ Borra también lo que hayas copiado desde otras aplicaciones."))
+        self.rb_clip_full = QRadioButton(QCoreApplication.translate("CelarPassApp", "Borrar contenido e historial siempre"))
+        lbl_clip_full = QLabel(QCoreApplication.translate("CelarPassApp", "Al copiar y al cerrar, se limpia el contenido Y todo el historial del portapapeles.\n⚠ Borra también lo que hayas copiado desde otras aplicaciones."))
         lbl_clip_full.setWordWrap(True)
         lbl_clip_full.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
-        self.rb_clip_current = QRadioButton(QCoreApplication.translate("CipherPassApp", "Solo borrar el contenido actual (Recomendado)"))
-        lbl_clip_current = QLabel(QCoreApplication.translate("CipherPassApp", "Limpia el último elemento copiado tras 15s, sin tocar el historial del portapapeles.\n⚠ Contraseñas anteriores pueden quedar en el historial del gestor de portapapeles."))
+        self.rb_clip_current = QRadioButton(QCoreApplication.translate("CelarPassApp", "Solo borrar el contenido actual (Recomendado)"))
+        lbl_clip_current = QLabel(QCoreApplication.translate("CelarPassApp", "Limpia el último elemento copiado tras 15s, sin tocar el historial del portapapeles.\n⚠ Contraseñas anteriores pueden quedar en el historial del gestor de portapapeles."))
         lbl_clip_current.setWordWrap(True)
         lbl_clip_current.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
-        self.rb_clip_history = QRadioButton(QCoreApplication.translate("CipherPassApp", "Borrar historial solo al cerrar"))
-        lbl_clip_history = QLabel(QCoreApplication.translate("CipherPassApp", "El contenido activo se limpia tras 15s. El historial completo se purga al cerrar la aplicación."))
+        self.rb_clip_history = QRadioButton(QCoreApplication.translate("CelarPassApp", "Borrar historial solo al cerrar"))
+        lbl_clip_history = QLabel(QCoreApplication.translate("CelarPassApp", "El contenido activo se limpia tras 15s. El historial completo se purga al cerrar la aplicación."))
         lbl_clip_history.setWordWrap(True)
         lbl_clip_history.setStyleSheet("color: gray; margin-bottom: 10px; margin-left: 20px;")
         
@@ -328,8 +328,8 @@ class SecuritySettingsDialog(QDialog):
         self.clip_group.setLayout(clip_layout)
         
         btn_layout = QHBoxLayout()
-        self.btn_accept = QPushButton(QCoreApplication.translate("CipherPassApp", "Aceptar"))
-        self.btn_cancel = QPushButton(QCoreApplication.translate("CipherPassApp", "Cancelar"))
+        self.btn_accept = QPushButton(QCoreApplication.translate("CelarPassApp", "Aceptar"))
+        self.btn_cancel = QPushButton(QCoreApplication.translate("CelarPassApp", "Cancelar"))
         btn_layout.addStretch()
         btn_layout.addWidget(self.btn_accept)
         btn_layout.addWidget(self.btn_cancel)
@@ -377,7 +377,7 @@ class SecuritySettingsDialog(QDialog):
         self.accept()
 
 
-class CipherPassApp(QMainWindow):
+class CelarPassApp(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.settings = SettingsManager()
@@ -505,7 +505,7 @@ class CipherPassApp(QMainWindow):
         self.ui.comboBox_idioma.blockSignals(True)
         self.ui.comboBox_idioma.clear()
         
-        self.lbl_copy_feedback = QLabel(QCoreApplication.translate("CipherPassApp", "✓ Copiado seguro, se borrará en 15 segundos"), self.ui)
+        self.lbl_copy_feedback = QLabel(QCoreApplication.translate("CelarPassApp", "✓ Copiado seguro, se borrará en 15 segundos"), self.ui)
         self.lbl_copy_feedback.setStyleSheet("color: #198754; margin-left: 10px; font-weight: bold;")
         self.lbl_copy_feedback.hide()
         
@@ -627,19 +627,19 @@ class CipherPassApp(QMainWindow):
         menu_bar.clear()  # Evitar duplicados al cambiar de idioma
         
         # Textos Traducibles
-        archivo_text = QCoreApplication.translate("CipherPassApp", "Archivo")
-        salir_text = QCoreApplication.translate("CipherPassApp", "Salir")
+        archivo_text = QCoreApplication.translate("CelarPassApp", "Archivo")
+        salir_text = QCoreApplication.translate("CelarPassApp", "Salir")
         
-        herramientas_text = QCoreApplication.translate("CipherPassApp", "Herramientas")
-        limpiar_portapapeles_text = QCoreApplication.translate("CipherPassApp", "Limpiar Portapapeles")
+        herramientas_text = QCoreApplication.translate("CelarPassApp", "Herramientas")
+        limpiar_portapapeles_text = QCoreApplication.translate("CelarPassApp", "Limpiar Portapapeles")
         
-        opciones_text = QCoreApplication.translate("CipherPassApp", "Opciones")
-        idioma_text = QCoreApplication.translate("CipherPassApp", "Idioma")
+        opciones_text = QCoreApplication.translate("CelarPassApp", "Opciones")
+        idioma_text = QCoreApplication.translate("CelarPassApp", "Idioma")
         
-        ayuda_text = QCoreApplication.translate("CipherPassApp", "Ayuda")
-        docs_text = QCoreApplication.translate("CipherPassApp", "Documentación en línea")
-        acerca_text = QCoreApplication.translate("CipherPassApp", "Acerca de CelarPass...")
-        seguridad_text = QCoreApplication.translate("CipherPassApp", "Seguridad...")
+        ayuda_text = QCoreApplication.translate("CelarPassApp", "Ayuda")
+        docs_text = QCoreApplication.translate("CelarPassApp", "Documentación en línea")
+        acerca_text = QCoreApplication.translate("CelarPassApp", "Acerca de CelarPass...")
+        seguridad_text = QCoreApplication.translate("CelarPassApp", "Seguridad...")
         
         # --- 1. Menú Archivo ---
         file_menu = menu_bar.addMenu(archivo_text)
@@ -740,8 +740,8 @@ class CipherPassApp(QMainWindow):
             
         if show_msg:
             QMessageBox.information(self, 
-                QCoreApplication.translate("CipherPassApp", "Portapapeles Limpio"), 
-                QCoreApplication.translate("CipherPassApp", "El portapapeles ha sido borrado por seguridad.")
+                QCoreApplication.translate("CelarPassApp", "Portapapeles Limpio"), 
+                QCoreApplication.translate("CelarPassApp", "El portapapeles ha sido borrado por seguridad.")
             )
 
     @Slot()
@@ -760,12 +760,12 @@ class CipherPassApp(QMainWindow):
     @Slot()
     def show_about_dialog(self) -> None:
         """Muestra el diálogo de información de la aplicación."""
-        estado = QCoreApplication.translate("CipherPassApp", "GNU AGPLv3 (Código Abierto)")
-        version_lbl = QCoreApplication.translate("CipherPassApp", "Versión:")
-        license_lbl = QCoreApplication.translate("CipherPassApp", "Licencia:")
-        desc_lbl = QCoreApplication.translate("CipherPassApp", "Aplicación de código abierto diseñada para generar, validar y proteger credenciales criptográficas asegurando tu privacidad offline-first.")
-        visit_lbl = QCoreApplication.translate("CipherPassApp", "Visitar el sitio web oficial")
-        about_title = QCoreApplication.translate("CipherPassApp", "Acerca de CelarPass")
+        estado = QCoreApplication.translate("CelarPassApp", "GNU AGPLv3 (Código Abierto)")
+        version_lbl = QCoreApplication.translate("CelarPassApp", "Versión:")
+        license_lbl = QCoreApplication.translate("CelarPassApp", "Licencia:")
+        desc_lbl = QCoreApplication.translate("CelarPassApp", "Aplicación de código abierto diseñada para generar, validar y proteger credenciales criptográficas asegurando tu privacidad offline-first.")
+        visit_lbl = QCoreApplication.translate("CelarPassApp", "Visitar el sitio web oficial")
+        about_title = QCoreApplication.translate("CelarPassApp", "Acerca de CelarPass")
         
         # QMessageBox.about interpreta HTML nativamente
         texto_html = (
@@ -774,7 +774,7 @@ class CipherPassApp(QMainWindow):
             f"<p><b>{license_lbl}</b> {estado}</p>"
             f"<hr>"
             f"<p>{desc_lbl}</p>"
-            f"<p><a href='https://www.cipherpass.com'>{visit_lbl}</a></p>"
+            f"<p><a href='https://www.celarpass.com'>{visit_lbl}</a></p>"
         )
         QMessageBox.about(self, about_title, texto_html)
 
@@ -784,14 +784,14 @@ class CipherPassApp(QMainWindow):
         current_pwd = self.ui.lineEdit_contrasena.text()
         if current_pwd and current_pwd != "Selecciona opciones":
             val, color, msg_key, _, _ = StrengthAnalyzer.get_unified_metrics(current_pwd)
-            msg = QCoreApplication.translate("CipherPassApp", msg_key)
+            msg = QCoreApplication.translate("CelarPassApp", msg_key)
         else:
             val, color, msg_key = StrengthAnalyzer.calculate_entropy_preview(
                 self.ui.spinBox_longitud.value(), self.ui.checkBox_mayusculas.isChecked(),
                 self.ui.checkBox_minusculas.isChecked(), self.ui.checkBox_numeros.isChecked(),
                 self.ui.checkBox_simbolos.isChecked()
             )
-            msg = QCoreApplication.translate("CipherPassApp", msg_key)
+            msg = QCoreApplication.translate("CelarPassApp", msg_key)
         self.ui.progressBar_fortaleza.setValue(val)
         self.ui.progressBar_fortaleza.setStyleSheet(f"QProgressBar::chunk {{ background-color: {color}; }}")
         self.ui.progressBar_fortaleza.setFormat(f"{msg} ({val}%)")
@@ -804,12 +804,12 @@ class CipherPassApp(QMainWindow):
             return
         val, color, msg_key, crack_seconds, warning_key = StrengthAnalyzer.get_unified_metrics(pwd)
         
-        msg = QCoreApplication.translate("CipherPassApp", msg_key)
-        warning = QCoreApplication.translate("CipherPassApp", warning_key) if warning_key else ""
+        msg = QCoreApplication.translate("CelarPassApp", msg_key)
+        warning = QCoreApplication.translate("CelarPassApp", warning_key) if warning_key else ""
         time_text = self._format_crack_time(crack_seconds)
         
         if warning: msg += f" ({warning})"
-        time_text_prefix = QCoreApplication.translate("CipherPassApp", "Tiempo estimado:")
+        time_text_prefix = QCoreApplication.translate("CelarPassApp", "Tiempo estimado:")
         self.ui.label_validar_tiempo.setText(f"{time_text_prefix} {time_text}")
         self.ui.progressBar_validar.setValue(val)
         self.ui.progressBar_validar.setStyleSheet(f"QProgressBar::chunk {{ background-color: {color}; }}")
@@ -817,18 +817,18 @@ class CipherPassApp(QMainWindow):
 
     def _format_crack_time(self, seconds: float) -> str:
         if seconds < 1:
-            return QCoreApplication.translate("CipherPassApp", "Instantáneo")
+            return QCoreApplication.translate("CelarPassApp", "Instantáneo")
         if seconds < 60:
-            return QCoreApplication.translate("CipherPassApp", f"{int(seconds)} s")
+            return QCoreApplication.translate("CelarPassApp", f"{int(seconds)} s")
         if seconds < 3600:
-            return QCoreApplication.translate("CipherPassApp", f"{int(seconds/60)} min")
+            return QCoreApplication.translate("CelarPassApp", f"{int(seconds/60)} min")
         if seconds < 86400:
-            return QCoreApplication.translate("CipherPassApp", f"{int(seconds/3600)} h")
+            return QCoreApplication.translate("CelarPassApp", f"{int(seconds/3600)} h")
         if seconds < 31536000:
-            return QCoreApplication.translate("CipherPassApp", f"{int(seconds/86400)} días")
+            return QCoreApplication.translate("CelarPassApp", f"{int(seconds/86400)} días")
         if seconds < 315360000:
-            return QCoreApplication.translate("CipherPassApp", f"{int(seconds/31536000)} años")
-        return QCoreApplication.translate("CipherPassApp", "Siglos")
+            return QCoreApplication.translate("CelarPassApp", f"{int(seconds/31536000)} años")
+        return QCoreApplication.translate("CelarPassApp", "Siglos")
 
     @Slot(bool)
     def toggle_service_tag_field(self, checked: bool) -> None:
@@ -907,7 +907,7 @@ class CipherPassApp(QMainWindow):
             self.ui.checkBox_minusculas.isChecked(), self.ui.checkBox_numeros.isChecked(),
             self.ui.checkBox_simbolos.isChecked(), self.ui.checkBox_evitar_ambiguos.isChecked()
         )
-        self.ui.lineEdit_contrasena.setText(pwd if pwd else QCoreApplication.translate("CipherPassApp", "Selecciona opciones"))
+        self.ui.lineEdit_contrasena.setText(pwd if pwd else QCoreApplication.translate("CelarPassApp", "Selecciona opciones"))
         self.update_password_strength()
         self.ui.btn_generar_contrasena.setEnabled(True)
 
@@ -916,7 +916,7 @@ class CipherPassApp(QMainWindow):
             self.ui.spinBox_num_palabras.value(), self.ui.checkBox_capitalizar.isChecked(),
             self.ui.checkBox_incluir_numeros.isChecked(), self.ui.lineEdit_separador.text()
         )
-        self.ui.lineEdit_frase.setText(phrase if phrase else QCoreApplication.translate("CipherPassApp", "Error: Sin diccionario"))
+        self.ui.lineEdit_frase.setText(phrase if phrase else QCoreApplication.translate("CelarPassApp", "Error: Sin diccionario"))
 
     def generate_username_ui(self) -> None:
         username = self.engine.generate_username(
@@ -926,14 +926,14 @@ class CipherPassApp(QMainWindow):
         self.ui.lineEdit_usuario.setText(username)
 
     def reset_validar_ui(self) -> None:
-        self.ui.label_validar_tiempo.setText(QCoreApplication.translate("CipherPassApp", "Tiempo estimado: -"))
+        self.ui.label_validar_tiempo.setText(QCoreApplication.translate("CelarPassApp", "Tiempo estimado: -"))
         self.ui.progressBar_validar.setValue(0)
         self.ui.progressBar_validar.setStyleSheet("")
-        self.ui.label_validar_mensaje.setText(QCoreApplication.translate("CipherPassApp", "Ingresa una contraseña..."))
+        self.ui.label_validar_mensaje.setText(QCoreApplication.translate("CelarPassApp", "Ingresa una contraseña..."))
 
     def copy_to_clipboard(self, widget: QLineEdit) -> None:
         text = widget.text()
-        if not text or text == QCoreApplication.translate("CipherPassApp", "Selecciona opciones") or text == QCoreApplication.translate("CipherPassApp", "Error: Sin diccionario"):
+        if not text or text == QCoreApplication.translate("CelarPassApp", "Selecciona opciones") or text == QCoreApplication.translate("CelarPassApp", "Error: Sin diccionario"):
             return
             
         # Guardar referencia en self para evitar recolección de basura prematura
@@ -949,7 +949,7 @@ class CipherPassApp(QMainWindow):
             original_text = btn.text()
             btn.setStyleSheet("background-color: #198754; color: white; border-radius: 4px;")
             if original_text:
-                btn.setText(QCoreApplication.translate("CipherPassApp", "¡Copiado!"))
+                btn.setText(QCoreApplication.translate("CelarPassApp", "¡Copiado!"))
                 
             def restore_btn():
                 btn.setStyleSheet(original_style)
@@ -960,7 +960,7 @@ class CipherPassApp(QMainWindow):
         is_new_copy = not self._clipboard_timer.isActive()
         self._clipboard_timer.start(15000)
         
-        msg = QCoreApplication.translate("CipherPassApp", "✓ Copiado seguro, se borrará en 15 segundos")
+        msg = QCoreApplication.translate("CelarPassApp", "✓ Copiado seguro, se borrará en 15 segundos")
         if hasattr(self, 'lbl_copy_feedback'):
             self.lbl_copy_feedback.setText(msg)
             self.lbl_copy_feedback.show()
@@ -971,7 +971,7 @@ class CipherPassApp(QMainWindow):
                 self._tray_icon.setIcon(self.windowIcon())
                 self._tray_icon.show()
             self._tray_icon.showMessage(
-                QCoreApplication.translate("CipherPassApp", "CelarPass Pro"), msg,
+                QCoreApplication.translate("CelarPassApp", "CelarPass Pro"), msg,
                 QSystemTrayIcon.MessageIcon.Information, 3000
             )
 
@@ -1029,7 +1029,7 @@ class CipherPassApp(QMainWindow):
         for ctrl in controls:
             ctrl.setEnabled(False)
             
-        policy_prefix = QCoreApplication.translate("CipherPassApp", "Bloqueado por Política:")
+        policy_prefix = QCoreApplication.translate("CelarPassApp", "Bloqueado por Política:")
         self.ui.label_compliance_badge.setText(f"{policy_prefix} {preset_name}")
         self.ui.label_compliance_badge.setVisible(True)
         self.update_password_strength()
@@ -1042,13 +1042,13 @@ class CipherPassApp(QMainWindow):
     def check_hibp(self) -> None:
         pwd = self.ui.lineEdit_validar_pass.text()
         if not pwd:
-            QMessageBox.warning(self, QCoreApplication.translate("CipherPassApp", "Vacío"), QCoreApplication.translate("CipherPassApp", "Ingresa una contraseña para validar."))
+            QMessageBox.warning(self, QCoreApplication.translate("CelarPassApp", "Vacío"), QCoreApplication.translate("CelarPassApp", "Ingresa una contraseña para validar."))
             return
 
         self.ui.btn_hibp_check.setEnabled(False)
         self.ui.progressBar_hibp.setVisible(True)
         self.ui.progressBar_hibp.setMaximum(0)
-        self.ui.label_hibp_resultado.setText(QCoreApplication.translate("CipherPassApp", "Consultando de forma anónima..."))
+        self.ui.label_hibp_resultado.setText(QCoreApplication.translate("CelarPassApp", "Consultando de forma anónima..."))
         self.ui.label_hibp_resultado.setStyleSheet("color: #fff;")
         self.ui.label_hibp_resultado.setVisible(True)
 
@@ -1062,15 +1062,15 @@ class CipherPassApp(QMainWindow):
         self.ui.btn_hibp_check.setEnabled(True)
 
         if count == -1:
-            error_prefix = QCoreApplication.translate("CipherPassApp", "⚠️ Error:")
+            error_prefix = QCoreApplication.translate("CelarPassApp", "⚠️ Error:")
             self.ui.label_hibp_resultado.setText(f"{error_prefix} {error_msg}")
             self.ui.label_hibp_resultado.setStyleSheet("background-color: #333; color: #ffc107;")
         elif count == 0:
-            self.ui.label_hibp_resultado.setText(QCoreApplication.translate("CipherPassApp", "✅ Excelente. Esta contraseña no aparece en brechas de datos conocidas."))
+            self.ui.label_hibp_resultado.setText(QCoreApplication.translate("CelarPassApp", "✅ Excelente. Esta contraseña no aparece en brechas de datos conocidas."))
             self.ui.label_hibp_resultado.setStyleSheet("background-color: #198754; color: #fff;")
         else:
-            danger_prefix = QCoreApplication.translate("CipherPassApp", "🚨 PELIGRO: Esta contraseña ha sido expuesta")
-            times_suffix = QCoreApplication.translate("CipherPassApp", "veces.")
+            danger_prefix = QCoreApplication.translate("CelarPassApp", "🚨 PELIGRO: Esta contraseña ha sido expuesta")
+            times_suffix = QCoreApplication.translate("CelarPassApp", "veces.")
             self.ui.label_hibp_resultado.setText(f"{danger_prefix} {count:,} {times_suffix}")
             self.ui.label_hibp_resultado.setStyleSheet("background-color: #dc3545; color: #fff;")
 
@@ -1078,38 +1078,38 @@ class CipherPassApp(QMainWindow):
     def export_vault_ui(self) -> None:
         data = self.ui.textEdit_export_data.toPlainText()
         if not data:
-            QMessageBox.warning(self, QCoreApplication.translate("CipherPassApp", "Error"), QCoreApplication.translate("CipherPassApp", "No hay datos para exportar."))
+            QMessageBox.warning(self, QCoreApplication.translate("CelarPassApp", "Error"), QCoreApplication.translate("CelarPassApp", "No hay datos para exportar."))
             return
 
-        pwd, ok = QInputDialog.getText(self, QCoreApplication.translate("CipherPassApp", "Cifrar Bóveda"), QCoreApplication.translate("CipherPassApp", "Ingresa la contraseña maestra:"), QLineEdit.Password)
+        pwd, ok = QInputDialog.getText(self, QCoreApplication.translate("CelarPassApp", "Cifrar Bóveda"), QCoreApplication.translate("CelarPassApp", "Ingresa la contraseña maestra:"), QLineEdit.Password)
         if not ok or not pwd: return
 
         use_argon2 = (self.ui.comboBox_vault_kdf.currentIndex() == 0) and HAS_ARGON2
         try:
             enc_data = self.vault_exporter.export_vault(data, pwd, use_argon2)
-            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CipherPassApp", "Guardar Bóveda"), "", "CelarPass Vault (*.cpv);;JSON Files (*.json)")
+            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CelarPassApp", "Guardar Bóveda"), "", "CelarPass Vault (*.cpv);;JSON Files (*.json)")
             if save_path:
                 with open(save_path, 'w', encoding='utf-8') as f:
                     f.write(enc_data)
-                self.ui.label_vault_estado.setText(QCoreApplication.translate("CipherPassApp", "✅ Bóveda exportada exitosamente."))
+                self.ui.label_vault_estado.setText(QCoreApplication.translate("CelarPassApp", "✅ Bóveda exportada exitosamente."))
                 self.ui.label_vault_estado.setStyleSheet("color: #2ecc71;")
         except Exception as e:
-            error_prefix = QCoreApplication.translate("CipherPassApp", "Fallo al exportar:")
-            QMessageBox.critical(self, QCoreApplication.translate("CipherPassApp", "Error Crítico"), f"{error_prefix} {e}")
+            error_prefix = QCoreApplication.translate("CelarPassApp", "Fallo al exportar:")
+            QMessageBox.critical(self, QCoreApplication.translate("CelarPassApp", "Error Crítico"), f"{error_prefix} {e}")
 
     @Slot()
     def browse_vault_file(self) -> None:
-        file_path, _ = QFileDialog.getOpenFileName(self, QCoreApplication.translate("CipherPassApp", "Abrir Bóveda"), "", "CelarPass Vault (*.cpv *.json);;All Files (*)")
+        file_path, _ = QFileDialog.getOpenFileName(self, QCoreApplication.translate("CelarPassApp", "Abrir Bóveda"), "", "CelarPass Vault (*.cpv *.json);;All Files (*)")
         if file_path: self.ui.lineEdit_import_path.setText(file_path)
 
     @Slot()
     def import_vault_ui(self) -> None:
         path = self.ui.lineEdit_import_path.text()
         if not os.path.exists(path):
-            QMessageBox.warning(self, QCoreApplication.translate("CipherPassApp", "Error"), QCoreApplication.translate("CipherPassApp", "Archivo no encontrado."))
+            QMessageBox.warning(self, QCoreApplication.translate("CelarPassApp", "Error"), QCoreApplication.translate("CelarPassApp", "Archivo no encontrado."))
             return
 
-        pwd, ok = QInputDialog.getText(self, QCoreApplication.translate("CipherPassApp", "Descifrar Bóveda"), QCoreApplication.translate("CipherPassApp", "Ingresa la contraseña maestra:"), QLineEdit.Password)
+        pwd, ok = QInputDialog.getText(self, QCoreApplication.translate("CelarPassApp", "Descifrar Bóveda"), QCoreApplication.translate("CelarPassApp", "Ingresa la contraseña maestra:"), QLineEdit.Password)
         if not ok or not pwd: return
 
         try:
@@ -1118,15 +1118,15 @@ class CipherPassApp(QMainWindow):
             decrypted = self.vault_exporter.import_vault(enc_data, pwd)
             if decrypted:
                 self.ui.textEdit_import_data.setPlainText(decrypted)
-                self.ui.label_vault_estado.setText(QCoreApplication.translate("CipherPassApp", "✅ Bóveda descifrada exitosamente."))
+                self.ui.label_vault_estado.setText(QCoreApplication.translate("CelarPassApp", "✅ Bóveda descifrada exitosamente."))
                 self.ui.label_vault_estado.setStyleSheet("color: #2ecc71;")
             else:
-                QMessageBox.critical(self, QCoreApplication.translate("CipherPassApp", "Acceso Denegado"), QCoreApplication.translate("CipherPassApp", "Contraseña maestra incorrecta o archivo dañado."))
-                self.ui.label_vault_estado.setText(QCoreApplication.translate("CipherPassApp", "❌ Fallo de descifrado."))
+                QMessageBox.critical(self, QCoreApplication.translate("CelarPassApp", "Acceso Denegado"), QCoreApplication.translate("CelarPassApp", "Contraseña maestra incorrecta o archivo dañado."))
+                self.ui.label_vault_estado.setText(QCoreApplication.translate("CelarPassApp", "❌ Fallo de descifrado."))
                 self.ui.label_vault_estado.setStyleSheet("color: #e74c3c;")
         except Exception as e:
-            error_prefix = QCoreApplication.translate("CipherPassApp", "Fallo de E/S:")
-            QMessageBox.critical(self, QCoreApplication.translate("CipherPassApp", "Error"), f"{error_prefix} {e}")
+            error_prefix = QCoreApplication.translate("CelarPassApp", "Fallo de E/S:")
+            QMessageBox.critical(self, QCoreApplication.translate("CelarPassApp", "Error"), f"{error_prefix} {e}")
 
     @Slot()
     def generate_totp_ui(self) -> None:
@@ -1145,29 +1145,29 @@ class CipherPassApp(QMainWindow):
                 self.ui.label_qr_image.setPixmap(pixmap)
                 self.ui.btn_save_qr.setEnabled(True)
         else:
-            self.ui.label_qr_image.setText(QCoreApplication.translate("CipherPassApp", "Módulo 'qrcode' no instalado.\nUsa el secreto manual."))
+            self.ui.label_qr_image.setText(QCoreApplication.translate("CelarPassApp", "Módulo 'qrcode' no instalado.\nUsa el secreto manual."))
             self.ui.btn_save_qr.setEnabled(False)
 
     @Slot()
     def save_qr_ui(self) -> None:
         pixmap = self.ui.label_qr_image.pixmap()
         if pixmap and not pixmap.isNull():
-            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CipherPassApp", "Guardar Código QR"), "totp_qr.png", "Images (*.png)")
+            save_path, _ = QFileDialog.getSaveFileName(self, QCoreApplication.translate("CelarPassApp", "Guardar Código QR"), "totp_qr.png", "Images (*.png)")
             if save_path:
                 pixmap.save(save_path, "PNG")
-                QMessageBox.information(self, QCoreApplication.translate("CipherPassApp", "Éxito"), QCoreApplication.translate("CipherPassApp", "Código QR guardado correctamente."))
+                QMessageBox.information(self, QCoreApplication.translate("CelarPassApp", "Éxito"), QCoreApplication.translate("CelarPassApp", "Código QR guardado correctamente."))
         else:
-            QMessageBox.warning(self, QCoreApplication.translate("CipherPassApp", "Error"), QCoreApplication.translate("CipherPassApp", "No hay un código QR para guardar."))
+            QMessageBox.warning(self, QCoreApplication.translate("CelarPassApp", "Error"), QCoreApplication.translate("CelarPassApp", "No hay un código QR para guardar."))
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
         print("CelarPass - Generador y validador de contraseñas criptográficas")
         print("\nUso:")
-        print("  cipherpass             Inicia la aplicación gráfica")
+        print("  celarpass              Inicia la aplicación gráfica")
         print("  celarpass-cli         Inicia la interfaz de línea de comandos (CLI)")
         print("\nPara ver las opciones de la CLI, ejecuta: celarpass-cli --help")
         sys.exit(0)
 
     app = QApplication(sys.argv)
-    window = CipherPassApp()
+    window = CelarPassApp()
     sys.exit(app.exec())

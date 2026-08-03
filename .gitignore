@@ -41,3 +41,4 @@ g19_rc.py
 # Traducciones compiladas
 resources/lang/*.qm
 resources/diceware/*.enc
+celarpass_core/

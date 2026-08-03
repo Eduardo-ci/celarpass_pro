@@ -63,7 +63,7 @@ Asegúrate de tener Python 3 instalado. La aplicación requiere las siguientes b
    ```bash
    git clone git@github.com:YOUR_USERNAME/CelarPass_Pro.git
    cd CelarPass_Pro
-   git clone git@github.com:YOUR_USERNAME/cipherpass-core.git cipherpass_core
+   git clone git@github.com:YOUR_USERNAME/celarpass-core.git celarpass_core
    ```
 
 2. Create a virtual environment and install dependencies / Crea un entorno virtual e instala las dependencias:
@@ -98,9 +98,9 @@ chmod +x build_package.sh
 ---
 ## 💻 Command Line Interface (CLI) / Interfaz de Línea de Comandos (CLI)
 
-CelarPass includes a terminal tool (`cipherpass_cli.py`) ideal for **SysAdmins, DevOps, and pipeline automation (CI/CD)**. It allows you to generate credentials, validate security, and encrypt secrets directly from the console, and can be linked to other tools via standard input (`stdin`).
+CelarPass includes a terminal tool (`celarpass_cli.py`) ideal for **SysAdmins, DevOps, and pipeline automation (CI/CD)**. It allows you to generate credentials, validate security, and encrypt secrets directly from the console, and can be linked to other tools via standard input (`stdin`).
 
-CelarPass incluye una herramienta de terminal (`cipherpass_cli.py`) ideal para **SysAdmins, DevOps y automatización de pipelines (CI/CD)**. Permite generar credenciales, validar seguridad y cifrar secretos directamente desde la consola, pudiendo enlazarse con otras herramientas mediante la entrada estándar (`stdin`).
+CelarPass incluye una herramienta de terminal (`celarpass_cli.py`) ideal para **SysAdmins, DevOps y automatización de pipelines (CI/CD)**. Permite generar credenciales, validar seguridad y cifrar secretos directamente desde la consola, pudiendo enlazarse con otras herramientas mediante la entrada estándar (`stdin`).
 
 ### Standalone CLI Installation / Instalación independiente de la CLI
 If you only need the CLI (e.g., on a server), you can install it globally with a single command without cloning the entire repository:

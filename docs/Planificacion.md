@@ -43,5 +43,5 @@ FASE 3 — CRIPTOGRAFÍA AVANZADA (dependencias: argon2-cffi, qrcode):
 3.2 Generador TOTP:
   - Generar 20 bytes con secrets.token_bytes(); codificar en Base32 sin padding (base64.b32encode)
   - Mostrar semilla Base32 textualmente en QLineEdit de solo lectura
-  - Si qrcode disponible: armar URI otpauth://totp/CipherPass:{label}?secret={seed}&issuer=CipherPass
+  - Si qrcode disponible: armar URI otpauth://totp/CelarPass:{label}?secret={seed}&issuer=CelarPass
     Renderizar QR como QPixmap en QLabel; botón para guardar imagen PNG

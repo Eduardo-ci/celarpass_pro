@@ -24,4 +24,4 @@ pillow
 rich
 
 # Core Criptográfico y Lógica de Negocio (Instalado desde tu nuevo repositorio)
-cipherpass_core @ git+https://github.com/Eduardo-ci/cipherpass_core.git@025db8e9f88251accfc9a09f64483c216fc1c080
+celarpass_core @ git+https://github.com/Eduardo-ci/celarpass_core.git@025db8e9f88251accfc9a09f64483c216fc1c080

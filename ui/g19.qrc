@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/icons">
-        <file> cipherpass.png</file>
+        <file> celarpass.png</file>
     </qresource>
 </RCC>

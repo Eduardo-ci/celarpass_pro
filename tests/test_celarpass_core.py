@@ -2,10 +2,10 @@ import unittest
 import json
 from unittest.mock import patch, MagicMock
 
-from cipherpass_core.generators import PasswordEngine, TOTPEngine
-from cipherpass_core.analyzers import StrengthAnalyzer
-from cipherpass_core.crypto_vault import VaultExporter
-from cipherpass_core.hibp import HIBPClient
+from celarpass_core.generators import PasswordEngine, TOTPEngine
+from celarpass_core.analyzers import StrengthAnalyzer
+from celarpass_core.crypto_vault import VaultExporter
+from celarpass_core.hibp import HIBPClient
 
 class TestPasswordEngine(unittest.TestCase):
     def setUp(self):
@@ -21,7 +21,7 @@ class TestPasswordEngine(unittest.TestCase):
         self.assertTrue(any(c.isdigit() for c in pwd), "Debe contener al menos un número")
         self.assertTrue(any(c.isupper() for c in pwd), "Debe contener al menos una mayúscula")
         # Verifica que contenga caracteres especiales de la constante
-        from cipherpass_core.generators import DEFAULT_SYMBOLS
+        from celarpass_core.generators import DEFAULT_SYMBOLS
         self.assertTrue(any(c in DEFAULT_SYMBOLS for c in pwd), "Debe contener símbolos")
 
     def test_generate_api_token(self):
@@ -53,14 +53,14 @@ class TestStrengthAnalyzer(unittest.TestCase):
         self.assertEqual(color, "#2ecc71")  # Color verde (Fuerte)
 
     def test_analyze_password_pattern(self):
-        from cipherpass_core.analyzers import analyze_password
+        from celarpass_core.analyzers import analyze_password
         # Contraseña con patrón claro (diccionario + símbolo)
         results = analyze_password("Password123!")
         # Debe identificar el patrón y no sobrestimar
         self.assertTrue(results['guesses'] < 10**8, "Debe detectar el patrón débil")
 
     def test_analyze_password_random_short(self):
-        from cipherpass_core.analyzers import analyze_password
+        from celarpass_core.analyzers import analyze_password
         import string, random
         # Contraseña aleatoria de 8 caracteres con todos los tipos
         chars = string.ascii_letters + string.digits + "!@#"
@@ -72,7 +72,7 @@ class TestStrengthAnalyzer(unittest.TestCase):
             self.assertTrue(results['guesses'] > 10**14, "Debe aplicar la cardinalidad matemática")
 
     def test_analyze_password_random_long(self):
-        from cipherpass_core.analyzers import analyze_password
+        from celarpass_core.analyzers import analyze_password
         import string, random
         # Contraseña aleatoria de 20 caracteres con todos los tipos
         chars = string.ascii_letters + string.digits + "!@#"
@@ -108,7 +108,7 @@ class TestVaultExporter(unittest.TestCase):
         self.assertIsNone(imported_data, "Debe devolver None si la contraseña es incorrecta")
 
 class TestHIBPClient(unittest.TestCase):
-    @patch('cipherpass_core.hibp.requests.get')
+    @patch('celarpass_core.hibp.requests.get')
     def test_check_password_pwned(self, mock_get):
         mock_response = MagicMock()
         mock_response.status_code = 200

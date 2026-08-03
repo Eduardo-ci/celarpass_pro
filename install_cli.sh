@@ -26,7 +26,7 @@ echo_err()  { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 # Versiones fijadas para evitar ataques de cadena de suministro en ramas mutables (ej. main).
 CLI_VERSION="v1.0.4"
 # CORE_VERSION usa el hash completo del commit porque el repositorio
-# cipherpass_core aún no tiene tags de release. Un hash de commit es
+# celarpass_core aún no tiene tags de release. Un hash de commit es
 # inmutable y más seguro que apuntar a una rama.
 CORE_VERSION="025db8e9f88251accfc9a09f64483c216fc1c080"
 
@@ -82,31 +82,31 @@ fi
 # Standalone: Instalación a nivel de usuario (descarga e instala en ~/.local/share).
 CURRENT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
-if [ -f "$CURRENT_DIR/cipherpass_cli.py" ] && [ -d "$CURRENT_DIR/cipherpass_core" ]; then
+if [ -f "$CURRENT_DIR/celarpass_cli.py" ] && [ -d "$CURRENT_DIR/celarpass_core" ]; then
     echo_info "Ejecutando en Modo Local (Repositorio clonado)..."
     INSTALL_DIR="$CURRENT_DIR"
-    CLI_SCRIPT="$INSTALL_DIR/cipherpass_cli.py"
+    CLI_SCRIPT="$INSTALL_DIR/celarpass_cli.py"
     VENV_DIR="$INSTALL_DIR/.venv"
-    # CORE_REPO_PATH apunta a la carpeta clonada de cipherpass_core tal cual
-    # está en disco. Puede o no tener anidamiento (cipherpass_core/cipherpass_core/);
+    # CORE_REPO_PATH apunta a la carpeta clonada de celarpass_core tal cual
+    # está en disco. Puede o no tener anidamiento (celarpass_core/celarpass_core/);
     # eso se resuelve más abajo de forma común para ambos modos.
-    CORE_REPO_PATH="$INSTALL_DIR/cipherpass_core"
+    CORE_REPO_PATH="$INSTALL_DIR/celarpass_core"
 
     chmod +x "$CLI_SCRIPT"
 else
     echo_info "Ejecutando en Modo Standalone (Instalación en ~/.local/share)..."
     INSTALL_DIR="$HOME/.local/share/celarpass-cli"
-    CLI_SCRIPT="$INSTALL_DIR/cipherpass_cli.py"
+    CLI_SCRIPT="$INSTALL_DIR/celarpass_cli.py"
     VENV_DIR="$INSTALL_DIR/.venv"
-    CORE_REPO_PATH="$INSTALL_DIR/cipherpass_core_repo"
+    CORE_REPO_PATH="$INSTALL_DIR/celarpass_core_repo"
     
     mkdir -p "$INSTALL_DIR"
     
-    echo_info "Descargando cipherpass_cli.py (versión: $CLI_VERSION)..."
+    echo_info "Descargando celarpass_cli.py (versión: $CLI_VERSION)..."
     if command -v curl >/dev/null 2>&1; then
-        curl -fsSL "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/cipherpass_cli.py" -o "$CLI_SCRIPT" || echo_err "Fallo al descargar cipherpass_cli.py."
+        curl -fsSL "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/celarpass_cli.py" -o "$CLI_SCRIPT" || echo_err "Fallo al descargar celarpass_cli.py."
     elif command -v wget >/dev/null 2>&1; then
-        wget -qO "$CLI_SCRIPT" "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/cipherpass_cli.py" || echo_err "Fallo al descargar cipherpass_cli.py."
+        wget -qO "$CLI_SCRIPT" "https://raw.githubusercontent.com/Eduardo-ci/celarpass_pro/${CLI_VERSION}/celarpass_cli.py" || echo_err "Fallo al descargar celarpass_cli.py."
     else
         echo_err "Necesitas tener instalado 'curl' o 'wget' para descargar los archivos."
     fi
@@ -123,7 +123,7 @@ else
     
     if [ ! -d "$CORE_REPO_PATH" ]; then
         echo_info "Clonando repositorio criptográfico base (versión: $CORE_VERSION)..."
-        git clone -q "https://github.com/Eduardo-ci/cipherpass_core.git" "$CORE_REPO_PATH"
+        git clone -q "https://github.com/Eduardo-ci/celarpass_core.git" "$CORE_REPO_PATH"
         git -C "$CORE_REPO_PATH" checkout -q "$CORE_VERSION"
     else
         echo_info "Actualizando repositorio criptográfico base (versión: $CORE_VERSION)..."
@@ -138,12 +138,12 @@ else
     ACTUAL_CORE_COMMIT=$(git -C "$CORE_REPO_PATH" rev-parse HEAD)
     if [ "$ACTUAL_CORE_COMMIT" != "$EXPECTED_CORE_COMMIT" ]; then
         rm -rf "$CORE_REPO_PATH"
-        echo_err "Verificación de integridad fallida para cipherpass_core. Commit esperado: $EXPECTED_CORE_COMMIT, obtenido: $ACTUAL_CORE_COMMIT. Posible compromiso del repositorio."
+        echo_err "Verificación de integridad fallida para celarpass_core. Commit esperado: $EXPECTED_CORE_COMMIT, obtenido: $ACTUAL_CORE_COMMIT. Posible compromiso del repositorio."
     fi
 fi
 
-# El repo de cipherpass_core puede venir anidado (la raíz del repo clonado
-# contiene OTRA carpeta cipherpass_core/ adentro, que es el paquete real con
+# El repo de celarpass_core puede venir anidado (la raíz del repo clonado
+# contiene OTRA carpeta celarpass_core/ adentro, que es el paquete real con
 # generators.py, hibp.py, etc.) o plano (setup.py/pyproject.toml directamente
 # en la raíz). Detectamos cuál es el caso e instalamos la carpeta correcta
 # con pip, en vez de asumir una estructura fija. Esto cubre tanto Modo Local
@@ -151,13 +151,13 @@ fi
 PIP_INSTALL_TARGET=""
 if [ -f "$CORE_REPO_PATH/setup.py" ] || [ -f "$CORE_REPO_PATH/pyproject.toml" ]; then
     PIP_INSTALL_TARGET="$CORE_REPO_PATH"
-elif [ -f "$CORE_REPO_PATH/cipherpass_core/setup.py" ] || [ -f "$CORE_REPO_PATH/cipherpass_core/pyproject.toml" ]; then
-    PIP_INSTALL_TARGET="$CORE_REPO_PATH/cipherpass_core"
+elif [ -f "$CORE_REPO_PATH/celarpass_core/setup.py" ] || [ -f "$CORE_REPO_PATH/celarpass_core/pyproject.toml" ]; then
+    PIP_INSTALL_TARGET="$CORE_REPO_PATH/celarpass_core"
 else
     if [ "$CURRENT_DIR" = "$INSTALL_DIR" ]; then
-        echo_warn "No se encontró 'setup.py' ni 'pyproject.toml' en modo local. Se omitirá la instalación de cipherpass_core con pip."
+        echo_warn "No se encontró 'setup.py' ni 'pyproject.toml' en modo local. Se omitirá la instalación de celarpass_core con pip."
     else
-        echo_err "No se encontró 'setup.py' ni 'pyproject.toml' en '$CORE_REPO_PATH' (ni en su posible subcarpeta anidada). No es posible instalar cipherpass_core como paquete de Python. Verifica que el repositorio tenga metadata de empaquetado válida."
+        echo_err "No se encontró 'setup.py' ni 'pyproject.toml' en '$CORE_REPO_PATH' (ni en su posible subcarpeta anidada). No es posible instalar celarpass_core como paquete de Python. Verifica que el repositorio tenga metadata de empaquetado válida."
     fi
 fi
 
@@ -197,14 +197,14 @@ if [ "$VENV_IS_NEW" -eq 1 ]; then
 fi
 
 # IMPORTANTE: esto corre SIEMPRE, tanto si el venv es nuevo como si ya existía.
-# Si solo instalamos cipherpass_core cuando el venv se crea por primera vez,
+# Si solo instalamos celarpass_core cuando el venv se crea por primera vez,
 # un "git pull" en una reinstalación deja el código fuente actualizado en
 # disco pero el paquete en site-packages queda con la versión vieja: el
 # wrapper sigue ejecutando código desactualizado sin ningún error visible.
 # PIP_INSTALL_TARGET ya resuelve el posible anidamiento del repo (ver arriba),
 # por lo que esta misma lógica cubre tanto Modo Local como Standalone.
 if [ -d "$PIP_INSTALL_TARGET" ]; then
-    echo_info "Instalando/actualizando paquete cipherpass_core en el entorno virtual..."
+    echo_info "Instalando/actualizando paquete celarpass_core en el entorno virtual..."
     "${PIP_CMD[@]}" install --quiet --force-reinstall --no-deps "$PIP_INSTALL_TARGET"
 fi
 

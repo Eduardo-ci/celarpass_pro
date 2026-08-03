@@ -11,7 +11,7 @@ Hay muchas formas de contribuir, no todo requiere escribir código:
 1. **Reportar Errores (Bugs):** Si encuentras un fallo, abre un *Issue* describiendo el problema, cómo reproducirlo y tu entorno (SO, versión de Python).
 2. **Sugerir Mejoras:** ¿Tienes una idea genial? Abre un *Issue* con la etiqueta `enhancement` explicando tu propuesta y cómo beneficiaría a los usuarios.
 3. **Traducciones (I18n):** CelarPass soporta múltiples idiomas. Puedes ayudar a mejorar las traducciones existentes o agregar nuevos idiomas (ver sección de traducciones).
-4. **Escribir Código:** Puedes resolver *Issues* abiertos, mejorar la eficiencia del motor criptográfico (`cipherpass_core`), o añadir nuevas funcionalidades a la interfaz.
+4. **Escribir Código:** Puedes resolver *Issues* abiertos, mejorar la eficiencia del motor criptográfico (`celarpass_core`), o añadir nuevas funcionalidades a la interfaz.
 5. **Mejorar Documentación:** Ayuda a hacer los manuales, *READMEs* o comentarios en el código más claros y accesibles.
 
 ## 💻 Entorno de Desarrollo
@@ -42,7 +42,7 @@ Para empezar a programar en CelarPass, sigue estos pasos:
 
 * **Python:** Intentamos seguir las convenciones de PEP 8. Asegúrate de que tu código sea legible, mantenga el estilo existente y utilice *Type Hints* (anotaciones de tipo) siempre que sea posible.
 * **UI (PySide6):** Los cambios en la interfaz gráfica se realizan a través de los archivos `.ui` ubicados en la carpeta `/ui`. Utiliza *Qt Designer* para modificarlos.
-* **Seguridad:** Dado que es una aplicación criptográfica, cualquier cambio en `cipherpass_core` será revisado exhaustivamente. Evita el uso de módulos inseguros como `random` para la generación de secretos, usando siempre `secrets` de la biblioteca estándar o abstracciones aprobadas por la arquitectura actual.
+* **Seguridad:** Dado que es una aplicación criptográfica, cualquier cambio en `celarpass_core` será revisado exhaustivamente. Evita el uso de módulos inseguros como `random` para la generación de secretos, usando siempre `secrets` de la biblioteca estándar o abstracciones aprobadas por la arquitectura actual.
 
 ## 🌍 Traducciones (Localización)
 

@@ -12,7 +12,7 @@ DefaultDirName={autopf}\CelarPass
 DefaultGroupName=CelarPass
 
 ; Iconos e interfaz
-SetupIconFile=resources\icons\cipherpass.ico
+SetupIconFile=resources\icons\celarpass.ico
 UninstallDisplayIcon={app}\celarpass.exe
 
 ; Configuración de salida

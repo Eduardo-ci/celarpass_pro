@@ -63,28 +63,28 @@ fetch_core() {
     # Ejemplo de uso: GH_USER=mi_usuario_github ./build_package.sh
     local gh_user="${GH_USER:?'ERROR: La variable GH_USER debe estar definida. Ej: GH_USER=mi_usuario ./build_package.sh'}"
     
-    echo_info "🌐 Obteniendo el núcleo criptográfico (cipherpass_core)..."
-    if [ -d "cipherpass_core/.git" ]; then
+    echo_info "🌐 Obteniendo el núcleo criptográfico (celarpass_core)..."
+    if [ -d "celarpass_core/.git" ]; then
         echo_info "Actualizando el repositorio público local..."
-        git -C cipherpass_core fetch origin
-    elif [ -d "cipherpass_core" ]; then
-        echo_warn "La carpeta 'cipherpass_core' ya existe pero no es un repositorio Git. Se usará la versión local sin actualizar."
+        git -C celarpass_core fetch origin
+    elif [ -d "celarpass_core" ]; then
+        echo_warn "La carpeta 'celarpass_core' ya existe pero no es un repositorio Git. Se usará la versión local sin actualizar."
     else
-        echo_info "Clonando repositorio público cipherpass_core..."
+        echo_info "Clonando repositorio público celarpass_core..."
         # Se usa SSH para clonar sin pedir contraseña (requiere llaves SSH configuradas)
-        git clone "git@github.com:${gh_user}/cipherpass_core.git" cipherpass_core
+        git clone "git@github.com:${gh_user}/celarpass_core.git" celarpass_core
     fi
     # SEGURIDAD (A-02): Verificación estricta contra un commit conocido
     # Hash actual del repositorio público obtenido hoy:
     local EXPECTED_COMMIT="025db8e9f88251accfc9a09f64483c216fc1c080"
     
     # Solo verificamos si realmente es un repositorio clonado (evita errores con tu código local)
-    if [ -d "cipherpass_core/.git" ]; then
-        git -C cipherpass_core checkout -q "$EXPECTED_COMMIT"
+    if [ -d "celarpass_core/.git" ]; then
+        git -C celarpass_core checkout -q "$EXPECTED_COMMIT"
         local actual_commit
-        actual_commit=$(git -C cipherpass_core rev-parse HEAD)
+        actual_commit=$(git -C celarpass_core rev-parse HEAD)
         if [ "${actual_commit}" != "${EXPECTED_COMMIT}" ]; then
-            echo_err "Hash de cipherpass_core (${actual_commit:0:7}) no coincide con el esperado (${EXPECTED_COMMIT:0:7}). ¡Posible manipulación de código!"
+            echo_err "Hash de celarpass_core (${actual_commit:0:7}) no coincide con el esperado (${EXPECTED_COMMIT:0:7}). ¡Posible manipulación de código!"
         fi
         echo_info "✅ Integridad verificada correctamente (Commit seguro: ${actual_commit:0:7})"
     else
@@ -102,7 +102,7 @@ build_executable() {
         --enable-plugin=pyside6 \
         --include-data-dir="resources=resources" \
         --include-data-dir="ui=ui" \
-        --include-package=cipherpass_core \
+        --include-package=celarpass_core \
         --output-dir="$DIST_DIR" \
         --output-filename="$APP_NAME" \
         --remove-output \
@@ -123,8 +123,8 @@ prepare_deb_structure() {
     chmod 755 "$DEB_DIR/opt/$APP_NAME/$APP_NAME"
     
     # Copiar icono para el sistema
-    if [ -f "cipherpass.png" ]; then
-        cp "cipherpass.png" "$DEB_DIR/usr/share/pixmaps/${APP_NAME}.png"
+    if [ -f "celarpass.png" ]; then
+        cp "celarpass.png" "$DEB_DIR/usr/share/pixmaps/${APP_NAME}.png"
     fi
 
     # Enlace global en /usr/bin
