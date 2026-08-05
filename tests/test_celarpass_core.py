@@ -32,7 +32,7 @@ class TestPasswordEngine(unittest.TestCase):
         token_hex = self.engine.generate_api_token(mode=1, length=16)
         self.assertEqual(len(token_hex), 32)  # 16 bytes = 32 caracteres hex
 
-class TestTOTPEngine(unittest.TestCase):
+class TestTOTPEngineCore(unittest.TestCase):
     def test_generate_secret(self):
         secret = TOTPEngine.generate_secret()
         self.assertEqual(len(secret), 32)
@@ -124,7 +124,7 @@ class TestVaultExporter(unittest.TestCase):
         self.assertIsNone(imported_data, "Debe devolver None si la contraseña es incorrecta")
 
 class TestHIBPClient(unittest.TestCase):
-    @patch('celarpass_core.hibp.requests.get')
+    @patch('requests.get')
     def test_check_password_pwned(self, mock_get):
         mock_response = MagicMock()
         mock_response.status_code = 200
