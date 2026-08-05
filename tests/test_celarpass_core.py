@@ -62,11 +62,19 @@ class TestStrengthAnalyzer(unittest.TestCase):
     def test_analyze_password_random_short(self):
         from celarpass_core.analyzers import analyze_password
         import string, random
-        # Contraseña aleatoria de 8 caracteres con todos los tipos
-        chars = string.ascii_letters + string.digits + "!@#"
-        pwd = ''.join(random.choice(chars) for _ in range(8))
+        # Contraseña de 8 caracteres garantizando todos los tipos de caracteres
+        mandatory = [
+            random.choice(string.ascii_lowercase),
+            random.choice(string.ascii_uppercase),
+            random.choice(string.digits),
+            random.choice("!@#")
+        ]
+        remaining = [random.choice(string.ascii_letters + string.digits + "!@#") for _ in range(4)]
+        chars = mandatory + remaining
+        random.shuffle(chars)
+        pwd = ''.join(chars)
         results = analyze_password(pwd)
-        # La entropía matemática de 8 chars con pool ~65 es ~65^8 = 3.18e14
+        # La entropía matemática de 8 chars con pool 95 es 95^8 = 6.63e15
         # Si zxcvbn la marca como fuerza bruta, el fix debe sobrescribir
         if len(results['sequence']) == 1 and results['sequence'][0].get("pattern") == "bruteforce":
             self.assertTrue(results['guesses'] > 10**14, "Debe aplicar la cardinalidad matemática")
@@ -74,11 +82,19 @@ class TestStrengthAnalyzer(unittest.TestCase):
     def test_analyze_password_random_long(self):
         from celarpass_core.analyzers import analyze_password
         import string, random
-        # Contraseña aleatoria de 20 caracteres con todos los tipos
-        chars = string.ascii_letters + string.digits + "!@#"
-        pwd = ''.join(random.choice(chars) for _ in range(20))
+        # Contraseña de 20 caracteres garantizando todos los tipos de caracteres
+        mandatory = [
+            random.choice(string.ascii_lowercase),
+            random.choice(string.ascii_uppercase),
+            random.choice(string.digits),
+            random.choice("!@#")
+        ]
+        remaining = [random.choice(string.ascii_letters + string.digits + "!@#") for _ in range(16)]
+        chars = mandatory + remaining
+        random.shuffle(chars)
+        pwd = ''.join(chars)
         results = analyze_password(pwd)
-        # La entropía matemática de 20 chars con pool ~65 es ~65^20 = 1.8e36
+        # La entropía matemática de 20 chars con pool 95 es 95^20 = 3.58e39
         if len(results['sequence']) == 1 and results['sequence'][0].get("pattern") == "bruteforce":
             self.assertTrue(results['guesses'] > 10**35, "Debe aplicar la cardinalidad matemática para contraseñas largas")
 
