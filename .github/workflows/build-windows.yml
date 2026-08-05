@@ -27,6 +27,7 @@ jobs:
       - name: Instalar Dependencias
         run: |
           python -m pip install --upgrade pip
+          if (Test-Path celarpass_core) { Remove-Item -Recurse -Force celarpass_core }
           git clone https://github.com/Eduardo-ci/celarpass_core.git celarpass_core
           pip install -e celarpass_core
           pip install -r requirements.txt
